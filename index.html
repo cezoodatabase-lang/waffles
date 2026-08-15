@@ -1,0 +1,8895 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<title>Golden Waffle</title>
+
+<!-- FONT AWESOME -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#fff;
+    color:#171717;
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+========================================================= */
+
+#loginPage{
+    width:100%;
+    min-height:100dvh;
+    background:#fff;
+}
+
+
+/* =========================================================
+   LOGIN IMAGE
+========================================================= */
+
+.loginImageWrap{
+    width:100%;
+    height:60dvh;
+
+    position:relative;
+    overflow:hidden;
+
+    border-bottom-left-radius:30px;
+    border-bottom-right-radius:30px;
+
+    background:#eee;
+}
+
+.loginImage{
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+    object-position:center;
+}
+
+
+/* =========================================================
+   LOGIN CONTENT
+========================================================= */
+
+.loginContent{
+    width:100%;
+
+    padding:
+        30px
+        22px
+        35px;
+}
+
+.title{
+    margin-bottom:18px;
+
+    font-size:22px;
+    line-height:1.25;
+
+    font-weight:700;
+
+    color:#171717;
+}
+
+
+/* =========================================================
+   INPUT BOX
+========================================================= */
+
+.inputBox{
+    width:100%;
+    height:56px;
+
+    display:flex;
+    align-items:center;
+
+    overflow:hidden;
+
+    background:#f7f7f7;
+
+    border:1.5px solid #e5e5e5;
+
+    border-radius:15px;
+
+    transition:.2s ease;
+}
+
+.inputBox:focus-within{
+    background:#fff;
+
+    border-color:#e6aa00;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(230,170,0,.08);
+}
+
+
+/* =========================================================
+   COUNTRY CODE
+========================================================= */
+
+.countryCode{
+    height:30px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 15px;
+
+    border-right:1px solid #ddd;
+
+    font-size:16px;
+    font-weight:700;
+
+    color:#222;
+}
+
+
+/* =========================================================
+   MOBILE INPUT
+========================================================= */
+
+.mobileInput{
+    flex:1;
+
+    width:100%;
+    height:100%;
+
+    padding:0 15px;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    font-size:16px;
+    font-weight:600;
+
+    color:#111;
+}
+
+.mobileInput::placeholder{
+    color:#aaa;
+    font-weight:400;
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.passwordBox{
+    margin-top:13px;
+}
+
+.passwordInput{
+    flex:1;
+
+    width:100%;
+    height:100%;
+
+    padding:0 15px;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    font-size:16px;
+
+    color:#111;
+}
+
+.passwordInput::placeholder{
+    color:#aaa;
+}
+
+
+/* =========================================================
+   SHOW PASSWORD
+========================================================= */
+
+.showPass{
+    height:100%;
+
+    padding:0 16px;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    color:#a97900;
+
+    font-size:12px;
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.errorText{
+    display:none;
+
+    margin-top:7px;
+
+    font-size:12px;
+    font-weight:600;
+
+    color:#e53935;
+}
+
+.errorText.show{
+    display:block;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+.loginBtn{
+    width:100%;
+    height:55px;
+
+    margin-top:14px;
+
+    border:none;
+    outline:none;
+
+    border-radius:15px;
+
+    background:#e9e9e9;
+
+    color:#aaa;
+
+    font-size:16px;
+    font-weight:700;
+
+    cursor:not-allowed;
+
+    transition:.2s ease;
+}
+
+.loginBtn.active{
+    background:#f4b400;
+
+    color:#111;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 7px 20px
+        rgba(244,180,0,.18);
+}
+
+.loginBtn.active:active{
+    transform:scale(.985);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON SPINNER
+========================================================= */
+
+.loginBtn.loading{
+    cursor:wait;
+}
+
+.loginBtnSpinner{
+    width:21px;
+    height:21px;
+
+    display:inline-block;
+
+    border:2.5px solid rgba(17,17,17,.22);
+    border-top-color:#111;
+
+    border-radius:50%;
+
+    animation:loginBtnSpin .7s linear infinite;
+}
+
+@keyframes loginBtnSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+#mainPage{
+    display:none;
+
+    width:100%;
+    min-height:100dvh;
+
+    background:#fff;
+
+    padding-bottom:
+        calc(82px + env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   TOP NAVIGATION
+========================================================= */
+
+.topNav{
+    width:100%;
+    height:125px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    background:#fff;
+
+    border-bottom:1px solid #f0f0f0;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0,0,0,.04);
+
+    overflow:hidden;
+}
+
+
+/* =========================================================
+   HANGING ICON AREA
+========================================================= */
+
+.hangingIcons{
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:flex-start;
+
+    padding:0 12px;
+}
+
+
+/* =========================================================
+   HANGER
+========================================================= */
+
+.hanger{
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    position:relative;
+}
+
+
+/* =========================================================
+   THREAD
+========================================================= */
+
+.hanger::before{
+    content:"";
+
+    display:block;
+
+    width:1.5px;
+
+    background:#d4d4d4;
+}
+
+
+/* =========================================================
+   LONG DIFFERENT THREADS
+========================================================= */
+
+.hanger:nth-child(1)::before{
+    height:48px;
+}
+
+.hanger:nth-child(2)::before{
+    height:68px;
+}
+
+.hanger:nth-child(3)::before{
+    height:40px;
+}
+
+.hanger:nth-child(4)::before{
+    height:62px;
+}
+
+.hanger:nth-child(5)::before{
+    height:45px;
+}
+
+.hanger:nth-child(6)::before{
+    height:72px;
+}
+
+
+/* =========================================================
+   FOOD ICON
+========================================================= */
+
+.hangerIcon{
+    width:39px;
+    height:39px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    font-size:18px;
+
+    box-shadow:
+        0 4px 12px
+        rgba(0,0,0,.08);
+}
+
+
+/* =========================================================
+   MULTI COLOR FOOD ICONS
+========================================================= */
+
+
+/* COOKIE */
+
+.hanger:nth-child(1) .hangerIcon{
+    background:#fff0d9;
+
+    color:#e38b19;
+
+    border:1px solid #ffd9aa;
+}
+
+
+/* ICE CREAM */
+
+.hanger:nth-child(2) .hangerIcon{
+    background:#ffe8f2;
+
+    color:#e6538a;
+
+    border:1px solid #ffc7dd;
+}
+
+
+/* BURGER */
+
+.hanger:nth-child(3) .hangerIcon{
+    background:#e8f8e8;
+
+    color:#36a34d;
+
+    border:1px solid #c5edca;
+}
+
+
+/* COFFEE */
+
+.hanger:nth-child(4) .hangerIcon{
+    background:#f2e8df;
+
+    color:#9b633b;
+
+    border:1px solid #e2cbb8;
+}
+
+
+/* CAKE */
+
+.hanger:nth-child(5) .hangerIcon{
+    background:#eee8ff;
+
+    color:#7d5ce7;
+
+    border:1px solid #d6c9ff;
+}
+
+
+/* FOOD */
+
+.hanger:nth-child(6) .hangerIcon{
+    background:#e5f5ff;
+
+    color:#218bc3;
+
+    border:1px solid #bee6fc;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.mainContent{
+    width:100%;
+
+    min-height:
+        calc(
+            100dvh
+            - 125px
+            - 82px
+        );
+
+    background:#fff;
+}
+
+
+/* =========================================================
+   PAGE SECTIONS
+========================================================= */
+
+.pageSection{
+    display:none;
+
+    width:100%;
+
+    min-height:
+        calc(
+            100dvh
+            - 125px
+            - 82px
+        );
+
+    background:#fff;
+}
+
+.pageSection.active{
+    display:block;
+}
+
+
+/* =========================================================
+   PAGE CONTENT AREA
+========================================================= */
+
+.pageDemo{
+    width:100%;
+
+    min-height:
+        calc(
+            100dvh
+            - 125px
+            - 82px
+        );
+
+    background:#fff;
+}
+
+
+/* =========================================================
+   BOTTOM NAVIGATION WRAPPER
+========================================================= */
+
+.bottomNavWrap{
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    z-index:500;
+
+    width:100%;
+
+    background:#fff;
+
+    padding-bottom:
+        env(safe-area-inset-bottom);
+
+    border-top:
+        1px solid #eeeeee;
+
+    box-shadow:
+        0 -4px 18px
+        rgba(0,0,0,.05);
+}
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottomNav{
+    width:100%;
+    height:72px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    background:#fff;
+}
+
+
+/* =========================================================
+   NAV ITEM
+========================================================= */
+
+.navItem{
+    position:relative;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:5px;
+
+    color:#999;
+
+    cursor:pointer;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:.2s ease;
+}
+
+
+/* =========================================================
+   NAV ICON
+========================================================= */
+
+.navItem i{
+    font-size:20px;
+
+    transition:.2s ease;
+}
+
+
+/* =========================================================
+   NAV TEXT
+========================================================= */
+
+.navItem span{
+    font-size:11px;
+
+    font-weight:600;
+}
+
+
+/* =========================================================
+   ACTIVE NAV
+========================================================= */
+
+.navItem.active{
+    color:#d39400;
+}
+
+.navItem.active i{
+    transform:
+        translateY(-2px);
+
+    color:#d39400;
+}
+
+
+/* ACTIVE TOP LINE */
+
+.navItem::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    width:0;
+
+    height:3px;
+
+    border-radius:
+        0 0 5px 5px;
+
+    background:#f4b400;
+
+    transition:.2s ease;
+}
+
+.navItem.active::before{
+    width:32px;
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media(max-height:700px){
+
+    .loginImageWrap{
+        height:56dvh;
+    }
+
+    .loginContent{
+        padding-top:22px;
+    }
+
+    .title{
+        font-size:20px;
+
+        margin-bottom:14px;
+    }
+
+    .inputBox{
+        height:50px;
+    }
+
+    .loginBtn{
+        height:50px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP LOGIN
+========================================================= */
+
+@media(min-width:700px){
+
+    #loginPage{
+        max-width:480px;
+
+        margin:0 auto;
+
+        box-shadow:
+            0 0 35px
+            rgba(0,0,0,.06);
+    }
+
+}
+
+
+
+/* =========================================================
+   ADMIN MENU MANAGER
+========================================================= */
+
+.adminShell{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:18px 16px 110px;
+}
+
+.adminTopRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.adminTitle{
+    font-size:22px;
+    font-weight:800;
+    color:#171717;
+}
+
+.addItemBtn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:14px;
+    background:#f4b400;
+    color:#111;
+    font-size:18px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.addItemBtn:active{
+    transform:scale(.96);
+}
+
+.addPanel{
+    display:none;
+    padding:14px;
+    margin-bottom:16px;
+    border:1px solid #ececec;
+    border-radius:18px;
+    background:#fafafa;
+}
+
+.addPanel.show{
+    display:block;
+}
+
+.adminInput,
+.adminSelect{
+    width:100%;
+    height:46px;
+    border:1px solid #e2e2e2;
+    border-radius:12px;
+    outline:none;
+    background:#fff;
+    padding:0 12px;
+    font-size:14px;
+    color:#171717;
+}
+
+.adminInput:focus,
+.adminSelect:focus{
+    border-color:#e3a800;
+    box-shadow:0 0 0 3px rgba(244,180,0,.08);
+}
+
+.addGrid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:9px;
+}
+
+.addActions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:10px;
+}
+
+.iconActionBtn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.saveTick{
+    background:#e9f8ed;
+    color:#199447;
+}
+
+.cancelTick{
+    background:#f2f2f2;
+    color:#666;
+}
+
+.adminStatus{
+    min-height:20px;
+    margin-bottom:8px;
+    font-size:12px;
+    font-weight:700;
+    color:#199447;
+}
+
+.adminStatus.error{
+    color:#d93025;
+}
+
+.categoryBlock{
+    margin-bottom:20px;
+}
+
+.categoryHeading{
+    font-size:15px;
+    font-weight:800;
+    color:#555;
+    margin:0 2px 9px;
+}
+
+.menuAdminList{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.menuAdminRow{
+    width:100%;
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 11px 10px 14px;
+    border:1px solid #eeeeee;
+    border-radius:16px;
+    background:#fff;
+}
+
+.menuAdminInfo{
+    min-width:0;
+    flex:1;
+}
+
+.menuAdminName{
+    font-size:14px;
+    line-height:1.3;
+    font-weight:700;
+    color:#171717;
+    word-break:break-word;
+}
+
+.menuAdminPrice{
+    margin-top:3px;
+    font-size:13px;
+    font-weight:700;
+    color:#b07b00;
+}
+
+.editMenuBtn{
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+    border:none;
+    border-radius:12px;
+    background:#f7f7f7;
+    color:#555;
+    cursor:pointer;
+}
+
+.editFields{
+    display:none;
+    width:100%;
+    grid-template-columns:minmax(0,1fr) 90px auto auto;
+    gap:7px;
+    align-items:center;
+}
+
+.menuAdminRow.editing .menuAdminInfo,
+.menuAdminRow.editing .editMenuBtn{
+    display:none;
+}
+
+.menuAdminRow.editing .editFields{
+    display:grid;
+}
+
+.editFields .adminInput{
+    height:42px;
+}
+
+.rowTick,
+.rowCancel{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:11px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.rowTick{
+    background:#e9f8ed;
+    color:#199447;
+}
+
+.rowCancel{
+    background:#f2f2f2;
+    color:#777;
+}
+
+.adminLoading{
+    padding:30px 0;
+    text-align:center;
+    color:#999;
+    font-size:13px;
+}
+
+.emptyAdmin{
+    padding:30px 10px;
+    text-align:center;
+    color:#999;
+    font-size:14px;
+}
+
+@media(max-width:430px){
+    .editFields{
+        grid-template-columns:minmax(0,1fr) 78px 36px 36px;
+        gap:5px;
+    }
+
+    .rowTick,
+    .rowCancel{
+        width:36px;
+        height:36px;
+    }
+}
+
+
+
+/* =========================================================
+   ADMIN SEARCH + CATEGORY HEADING + SAVE ANIMATION
+========================================================= */
+
+.adminSearchWrap{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin:0 0 16px;
+}
+
+.adminSearchBox{
+    width:100%;
+    max-width:520px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 14px;
+    background:#f7f7f7;
+    border:1px solid #e9e9e9;
+    border-radius:15px;
+    transition:.2s ease;
+}
+
+.adminSearchBox:focus-within{
+    background:#fff;
+    border-color:#e3a800;
+    box-shadow:0 0 0 3px rgba(244,180,0,.08);
+}
+
+.adminSearchBox i{
+    color:#9b9b9b;
+    font-size:14px;
+    flex:0 0 auto;
+}
+
+.adminSearchInput{
+    flex:1;
+    min-width:0;
+    height:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-size:14px;
+    color:#171717;
+}
+
+.adminSearchInput::placeholder{
+    color:#aaa;
+}
+
+/* Bigger category heading */
+.categoryHeading{
+    position:relative;
+    font-size:20px;
+    line-height:1.2;
+    font-weight:900;
+    color:#a76700;
+    margin:4px 2px 12px;
+    padding-left:11px;
+    letter-spacing:-.2px;
+}
+
+.categoryHeading::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:2px;
+    bottom:2px;
+    width:4px;
+    border-radius:8px;
+    background:#f4b400;
+}
+
+/* Saved feedback stays inside the same row */
+.menuAdminRow{
+    position:relative;
+}
+
+.rowSavedBadge{
+    position:absolute;
+    right:11px;
+    top:50%;
+    transform:translateY(-50%) scale(.8);
+    display:flex;
+    align-items:center;
+    gap:5px;
+    padding:7px 10px;
+    border-radius:12px;
+    background:#fff;
+    font-size:12px;
+    font-weight:800;
+    color:#179447;
+    opacity:0;
+    pointer-events:none;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:5;
+}
+
+.menuAdminRow.showSaved .rowSavedBadge{
+    opacity:1;
+    transform:translateY(-50%) scale(1);
+}
+
+/* Multicolor animated tick */
+@keyframes rainbowTick{
+    0%{
+        background:#ffebee;
+        color:#e53935;
+        transform:scale(1);
+    }
+    20%{
+        background:#fff3e0;
+        color:#fb8c00;
+        transform:scale(1.12) rotate(-8deg);
+    }
+    40%{
+        background:#fffde7;
+        color:#d6a600;
+        transform:scale(1.18) rotate(7deg);
+    }
+    60%{
+        background:#e8f5e9;
+        color:#2e9d50;
+        transform:scale(1.15) rotate(-5deg);
+    }
+    80%{
+        background:#e3f2fd;
+        color:#2389d7;
+        transform:scale(1.1) rotate(4deg);
+    }
+    100%{
+        background:#f3e5f5;
+        color:#8e44ad;
+        transform:scale(1);
+    }
+}
+
+.rowTick.savedAnimate{
+    animation:rainbowTick .75s ease-in-out;
+}
+
+.rowTick.savedAnimate i{
+    animation:tickPop .75s ease-in-out;
+}
+
+@keyframes tickPop{
+    0%{ transform:scale(.7); }
+    45%{ transform:scale(1.35); }
+    100%{ transform:scale(1); }
+}
+
+.noSearchResult{
+    padding:34px 10px;
+    text-align:center;
+    color:#999;
+    font-size:14px;
+}
+
+
+
+/* =========================================================
+   AUTH RESTORE LOADER
+========================================================= */
+#authLoader{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.authLoaderSpinner{
+    width:34px;
+    height:34px;
+    border:3px solid #eeeeee;
+    border-top-color:#f4b400;
+    border-radius:50%;
+    animation:authSpin .8s linear infinite;
+}
+
+@keyframes authSpin{
+    to{ transform:rotate(360deg); }
+}
+
+
+/* =========================================================
+   ADMIN ACCOUNTS
+========================================================= */
+
+.adminAccountsSection{
+    width:100%;
+    margin-top:30px;
+    padding-top:22px;
+    border-top:1px solid #eeeeee;
+}
+
+.adminAccountsTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.adminAccountsTitle{
+    font-size:20px;
+    font-weight:900;
+    color:#6b49c8;
+}
+
+.adminAddBtn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:14px;
+    background:#eee8ff;
+    color:#6b49c8;
+    font-size:17px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.adminAddBtn:active{
+    transform:scale(.96);
+}
+
+.newAdminPanel{
+    display:none;
+    padding:14px;
+    margin-bottom:13px;
+    border:1px solid #e9e4fb;
+    border-radius:18px;
+    background:#fbf9ff;
+}
+
+.newAdminPanel.show{
+    display:block;
+}
+
+.adminAccountsList{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.adminAccountRow{
+    min-height:60px;
+    padding:10px 11px 10px 14px;
+    border:1px solid #eeeeee;
+    border-radius:16px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position:relative;
+}
+
+.adminAccountIcon{
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+    border-radius:12px;
+    background:#f3efff;
+    color:#6b49c8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.adminAccountInfo{
+    min-width:0;
+    flex:1;
+}
+
+.adminAccountMobile{
+    font-size:14px;
+    font-weight:800;
+    color:#171717;
+}
+
+.adminAccountTag{
+    margin-top:3px;
+    font-size:11px;
+    color:#999;
+}
+
+.deleteAdminBtn{
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+    border:none;
+    border-radius:12px;
+    background:#fff0f0;
+    color:#d94141;
+    cursor:pointer;
+}
+
+.deleteAdminBtn:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.adminInlineSaved{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%) scale(.85);
+    padding:7px 10px;
+    border-radius:12px;
+    background:#fff;
+    font-size:12px;
+    font-weight:800;
+    color:#1b9648;
+    opacity:0;
+    pointer-events:none;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+    transition:.2s ease;
+}
+
+.adminAccountRow.showSaved .adminInlineSaved{
+    opacity:1;
+    transform:translateY(-50%) scale(1);
+}
+
+.logoutArea{
+    width:100%;
+    margin-top:28px;
+    padding-top:18px;
+    border-top:1px solid #eeeeee;
+}
+
+.logoutBtn{
+    width:100%;
+    height:50px;
+    border:1px solid #ffd4d4;
+    border-radius:15px;
+    background:#fff5f5;
+    color:#cf3838;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.logoutBtn:active{
+    transform:scale(.99);
+}
+
+
+/* =========================================================
+   LOGIN INVALID STATE
+========================================================= */
+.inputBox.loginInvalid{
+    border-color:#e53935 !important;
+    background:#fff8f8 !important;
+    box-shadow:0 0 0 4px rgba(229,57,53,.08) !important;
+}
+
+.inputBox.loginInvalid .mobileInput,
+.inputBox.loginInvalid .passwordInput{
+    color:#d93025;
+}
+
+.inputBox.loginInvalid .countryCode{
+    color:#d93025;
+    border-right-color:#f2b8b5;
+}
+
+.inputBox.loginInvalid.shake{
+    animation:loginFieldShake .34s ease;
+}
+
+@keyframes loginFieldShake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-5px); }
+    40%{ transform:translateX(5px); }
+    60%{ transform:translateX(-3px); }
+    80%{ transform:translateX(3px); }
+}
+
+
+
+/* =========================================================
+   BILL ITEMS
+========================================================= */
+
+.billShell{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:18px 16px 110px;
+}
+
+.billTop{
+    margin-bottom:16px;
+}
+
+.billTitle{
+    font-size:22px;
+    font-weight:900;
+    color:#171717;
+}
+
+.billSub{
+    margin-top:4px;
+    font-size:12px;
+    color:#999;
+}
+
+.billCategory{
+    margin-bottom:22px;
+}
+
+.billCategoryTitle{
+    position:relative;
+    margin:0 2px 11px;
+    padding-left:11px;
+    font-size:19px;
+    line-height:1.2;
+    font-weight:900;
+    color:#a76700;
+}
+
+.billCategoryTitle::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:2px;
+    bottom:2px;
+    width:4px;
+    border-radius:8px;
+    background:#f4b400;
+}
+
+.billGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+}
+
+.billItemCard{
+    min-width:0;
+    min-height:132px;
+    padding:13px;
+    border:1px solid #eeeeee;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.035);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.billItemName{
+    font-size:14px;
+    line-height:1.35;
+    font-weight:800;
+    color:#171717;
+    word-break:break-word;
+}
+
+.billItemPrice{
+    margin-top:7px;
+    font-size:17px;
+    font-weight:900;
+    color:#b07b00;
+}
+
+.billQtyRow{
+    margin-top:13px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.qtyBtn{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:11px;
+    background:#f7f7f7;
+    color:#222;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+    transition:.15s ease;
+}
+
+.qtyBtn:active{
+    transform:scale(.93);
+}
+
+.qtyBtn.plus{
+    background:#fff3c8;
+    color:#9b6d00;
+}
+
+.qtyValue{
+    min-width:32px;
+    text-align:center;
+    font-size:15px;
+    font-weight:900;
+    color:#171717;
+}
+
+.billLoading{
+    padding:40px 10px;
+    text-align:center;
+    color:#999;
+    font-size:13px;
+}
+
+.billEmpty{
+    padding:40px 10px;
+    text-align:center;
+    color:#999;
+    font-size:14px;
+}
+
+@media(max-width:380px){
+    .billGrid{
+        grid-template-columns:1fr;
+    }
+}
+
+
+
+/* =========================================================
+   FLOATING CART BAR
+========================================================= */
+
+.floatingCartBar{
+    position:fixed;
+    left:14px;
+    right:14px;
+    bottom:calc(82px + env(safe-area-inset-bottom));
+
+    z-index:450;
+
+    max-width:720px;
+    margin:0 auto;
+
+    min-height:62px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+
+    padding:10px 14px;
+
+    background:#171717;
+    color:#fff;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.20);
+
+    opacity:0;
+    pointer-events:none;
+
+    transform:translateY(18px) scale(.98);
+
+    transition:
+        opacity .22s ease,
+        transform .22s ease;
+}
+
+.floatingCartBar.show{
+    opacity:1;
+    pointer-events:auto;
+
+    transform:translateY(0) scale(1);
+}
+
+.cartLeft{
+    min-width:0;
+
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.cartIcon{
+    width:42px;
+    height:42px;
+
+    flex:0 0 42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:#f4b400;
+    color:#111;
+
+    font-size:18px;
+}
+
+.cartInfo{
+    min-width:0;
+}
+
+.cartQty{
+    font-size:13px;
+    font-weight:800;
+    line-height:1.2;
+}
+
+.cartSub{
+    margin-top:3px;
+
+    font-size:11px;
+    color:#cfcfcf;
+}
+
+.cartTotalWrap{
+    flex:0 0 auto;
+    text-align:right;
+}
+
+.cartTotalLabel{
+    font-size:10px;
+    color:#bdbdbd;
+}
+
+.cartTotal{
+    margin-top:2px;
+
+    font-size:18px;
+    font-weight:900;
+    color:#fff;
+}
+
+@media(min-width:748px){
+
+    .floatingCartBar{
+        left:50%;
+        right:auto;
+        width:calc(100% - 28px);
+        transform:translate(-50%,18px) scale(.98);
+    }
+
+    .floatingCartBar.show{
+        transform:translate(-50%,0) scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   CART BAR - LIGHT + PRINT
+========================================================= */
+.floatingCartBar{
+    background:#fff !important;
+    color:#171717 !important;
+    border:1px solid #ececec;
+    box-shadow:0 8px 28px rgba(0,0,0,.12);
+    min-height:60px;
+}
+
+.cartLeft{
+    flex:1;
+}
+
+.cartIcon,
+.cartInfo,
+.cartTotalLabel{
+    display:none !important;
+}
+
+.cartTotalWrap{
+    flex:1;
+    text-align:left !important;
+}
+
+.cartTotal{
+    margin:0 !important;
+    font-size:20px !important;
+    font-weight:900 !important;
+    color:#171717 !important;
+}
+
+.cartPrintBtn{
+    width:44px;
+    height:44px;
+    flex:0 0 44px;
+    border:none;
+    border-radius:13px;
+    background:#f4b400;
+    color:#111;
+    font-size:17px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.cartPrintBtn:active{
+    transform:scale(.94);
+}
+
+@media print{
+    .topDecoration,
+    .bottomNavWrap,
+    .floatingCartBar{
+        display:none !important;
+    }
+}
+
+
+
+/* =========================================================
+   CART COUNTS
+========================================================= */
+
+.cartSummary{
+    flex:1;
+    min-width:0;
+}
+
+.cartCounts{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:3px;
+}
+
+.cartCountText{
+    font-size:11px;
+    font-weight:800;
+    color:#666;
+}
+
+.cartDot{
+    font-size:10px;
+    color:#bbb;
+}
+
+.cartTotal{
+    font-size:20px !important;
+    font-weight:900 !important;
+    color:#171717 !important;
+    text-align:left;
+}
+
+
+/* =========================================================
+   BILL CENTER LOADING SPINNER
+========================================================= */
+.billLoading{
+    min-height:260px;
+    padding:0 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.billLoadingSpinner{
+    width:34px;
+    height:34px;
+    border:3px solid #eeeeee;
+    border-top-color:#f4b400;
+    border-radius:50%;
+    animation:billLoadingSpin .75s linear infinite;
+}
+
+@keyframes billLoadingSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+
+/* =========================================================
+   PRINT BUTTON SAVE STATES
+========================================================= */
+
+.cartPrintBtn{
+    position:relative;
+    overflow:hidden;
+}
+
+.cartPrintBtn:disabled{
+    cursor:wait;
+    opacity:1;
+}
+
+.printBtnSpinner{
+    width:19px;
+    height:19px;
+    display:inline-block;
+    border:2.5px solid rgba(17,17,17,.20);
+    border-top-color:#111;
+    border-radius:50%;
+    animation:printBtnSpin .65s linear infinite;
+}
+
+@keyframes printBtnSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.cartPrintBtn.printSaved{
+    background:#e9f8ed !important;
+    color:#169447 !important;
+}
+
+.cartPrintBtn.printSaved i{
+    animation:printTickPop .5s ease;
+}
+
+@keyframes printTickPop{
+    0%{
+        transform:scale(.55) rotate(-18deg);
+        opacity:.2;
+    }
+    55%{
+        transform:scale(1.32) rotate(7deg);
+        opacity:1;
+    }
+    100%{
+        transform:scale(1) rotate(0);
+        opacity:1;
+    }
+}
+
+.cartPrintBtn.printError{
+    background:#fff0f0 !important;
+    color:#d94141 !important;
+}
+
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboardShell{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:18px 16px 110px;
+}
+
+.dashboardHeader{
+    margin-bottom:15px;
+}
+
+.dashboardTitle{
+    font-size:22px;
+    font-weight:900;
+    color:#171717;
+}
+
+.dashboardSub{
+    margin-top:4px;
+    font-size:12px;
+    color:#999;
+}
+
+.dashboardStats{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:16px;
+}
+
+.statCard{
+    min-height:100px;
+    padding:14px;
+    border:1px solid #eeeeee;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.035);
+}
+
+.statIcon{
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    margin-bottom:11px;
+    font-size:15px;
+}
+
+.statCard:nth-child(1) .statIcon{
+    background:#fff2c9;
+    color:#a87800;
+}
+
+.statCard:nth-child(2) .statIcon{
+    background:#e9f8ed;
+    color:#159447;
+}
+
+.statLabel{
+    font-size:11px;
+    font-weight:700;
+    color:#8a8a8a;
+}
+
+.statValue{
+    margin-top:4px;
+    font-size:23px;
+    line-height:1.1;
+    font-weight:900;
+    color:#171717;
+}
+
+.dashboardSearchWrap{
+    width:100%;
+    margin-bottom:16px;
+}
+
+.dashboardSearchBox{
+    width:100%;
+    height:48px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 14px;
+    border:1px solid #e9e9e9;
+    border-radius:15px;
+    background:#f7f7f7;
+    transition:.2s ease;
+}
+
+.dashboardSearchBox:focus-within{
+    background:#fff;
+    border-color:#e3a800;
+    box-shadow:0 0 0 3px rgba(244,180,0,.08);
+}
+
+.dashboardSearchBox i{
+    color:#999;
+    font-size:14px;
+}
+
+.dashboardSearchInput{
+    flex:1;
+    min-width:0;
+    height:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-size:14px;
+    color:#171717;
+}
+
+.dashboardSearchInput::placeholder{
+    color:#aaa;
+}
+
+.chartCard{
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    border:1px solid #eeeeee;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.035);
+}
+
+.chartTitle{
+    font-size:16px;
+    font-weight:900;
+    color:#171717;
+    margin-bottom:4px;
+}
+
+.chartSub{
+    font-size:11px;
+    color:#999;
+    margin-bottom:12px;
+}
+
+.chartCanvasWrap{
+    width:100%;
+    height:230px;
+    position:relative;
+}
+
+.dayReportTitle{
+    font-size:19px;
+    font-weight:900;
+    color:#a76700;
+    margin:0 0 11px;
+}
+
+.dayReportList{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.dayReportRow{
+    min-height:64px;
+    padding:11px 13px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border:1px solid #eeeeee;
+    border-radius:16px;
+    background:#fff;
+}
+
+.dayReportLeft{
+    min-width:0;
+    flex:1;
+}
+
+.dayReportDate{
+    font-size:14px;
+    font-weight:800;
+    color:#171717;
+}
+
+.dayReportMeta{
+    margin-top:3px;
+    font-size:11px;
+    color:#999;
+}
+
+.dayReportAmount{
+    flex:0 0 auto;
+    font-size:15px;
+    font-weight:900;
+    color:#159447;
+}
+
+.dashboardLoading{
+    min-height:220px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.dashboardSpinner{
+    width:34px;
+    height:34px;
+    border:3px solid #eeeeee;
+    border-top-color:#f4b400;
+    border-radius:50%;
+    animation:dashboardSpin .75s linear infinite;
+}
+
+@keyframes dashboardSpin{
+    to{ transform:rotate(360deg); }
+}
+
+.dashboardEmpty{
+    padding:30px 10px;
+    text-align:center;
+    font-size:13px;
+    color:#999;
+}
+
+
+
+/* =========================================================
+   ADMIN STOCK TOGGLE
+========================================================= */
+
+.stockToggleWrap{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:0 0 auto;
+}
+
+.stockText{
+    font-size:11px;
+    font-weight:800;
+    color:#888;
+    min-width:48px;
+    text-align:right;
+}
+
+.stockText.on{
+    color:#159447;
+}
+
+.stockText.off{
+    color:#d94141;
+}
+
+.stockSwitch{
+    position:relative;
+    width:46px;
+    height:26px;
+    flex:0 0 46px;
+}
+
+.stockSwitch input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.stockSlider{
+    position:absolute;
+    inset:0;
+    border-radius:999px;
+    background:#dedede;
+    cursor:pointer;
+    transition:.22s ease;
+}
+
+.stockSlider::before{
+    content:"";
+    position:absolute;
+    width:20px;
+    height:20px;
+    left:3px;
+    top:3px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 2px 7px rgba(0,0,0,.16);
+    transition:.22s ease;
+}
+
+.stockSwitch input:checked + .stockSlider{
+    background:#27b45f;
+}
+
+.stockSwitch input:checked + .stockSlider::before{
+    transform:translateX(20px);
+}
+
+.stockSwitch.saving .stockSlider{
+    opacity:.55;
+    cursor:wait;
+}
+
+
+/* =========================================================
+   BILL OUT OF STOCK
+========================================================= */
+
+.billItemCard{
+    position:relative;
+    overflow:hidden;
+}
+
+.billItemCard.outOfStock{
+    background:#fafafa;
+    border-color:#ececec;
+}
+
+.billItemCard.outOfStock .billItemName,
+.billItemCard.outOfStock .billItemPrice{
+    opacity:.48;
+}
+
+.billItemCard.outOfStock .billQtyRow{
+    opacity:.35;
+}
+
+.billItemCard.outOfStock .qtyBtn{
+    pointer-events:none;
+}
+
+.outOfStockRibbon{
+    position:absolute;
+    top:11px;
+    right:-31px;
+    width:120px;
+    padding:5px 0;
+    text-align:center;
+    background:#e74b4b;
+    color:#fff;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.6px;
+    transform:rotate(38deg);
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    z-index:3;
+}
+
+.billItemCard.outOfStock::after{
+    content:"Out of Stock";
+    position:absolute;
+    left:12px;
+    bottom:14px;
+    font-size:11px;
+    font-weight:900;
+    color:#d94141;
+    background:#fff0f0;
+    border:1px solid #ffd4d4;
+    border-radius:8px;
+    padding:5px 8px;
+}
+
+.billItemCard.outOfStock .billQtyRow{
+    visibility:hidden;
+}
+
+
+.menuAdminRow.editing .stockToggleWrap{
+    display:none;
+}
+
+
+
+/* =========================================================
+   ADMIN ALL ORDERS BUTTON
+========================================================= */
+
+.allOrdersBtn{
+    width:100%;
+    height:50px;
+    margin-top:18px;
+    border:none;
+    border-radius:15px;
+    background:#171717;
+    color:#fff;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+}
+
+.allOrdersBtn:active{
+    transform:scale(.99);
+}
+
+
+/* =========================================================
+   ALL ORDERS FULL PAGE
+========================================================= */
+
+#allOrdersPage{
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    display:none;
+    background:#fff;
+    overflow:hidden;
+    touch-action:pan-y;
+
+    /* requested safe area before the 45px header */
+    padding-top:max(45px, env(safe-area-inset-top));
+}
+
+#allOrdersPage.show{
+    display:block;
+}
+
+.ordersTopBar{
+    height:45px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 10px;
+    border-bottom:1px solid #eeeeee;
+    background:#fff;
+    position:sticky;
+    top:0;
+    z-index:5;
+}
+
+.ordersTopSide{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:11px;
+    background:#f6f6f6;
+    color:#222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.ordersTopTitle{
+    font-size:15px;
+    font-weight:900;
+    color:#171717;
+}
+
+.ordersBody{
+    height:calc(100dvh - 45px - max(45px, env(safe-area-inset-top)));
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:14px 14px 28px;
+}
+
+.ordersSearchWrap{
+    position:sticky;
+    top:0;
+    z-index:4;
+    padding-bottom:12px;
+    background:#fff;
+}
+
+.ordersSearchBox{
+    width:100%;
+    height:46px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 14px;
+    background:#f7f7f7;
+    border:1px solid #e9e9e9;
+    border-radius:14px;
+}
+
+.ordersSearchBox:focus-within{
+    background:#fff;
+    border-color:#e3a800;
+    box-shadow:0 0 0 3px rgba(244,180,0,.08);
+}
+
+.ordersSearchBox i{
+    color:#999;
+    font-size:14px;
+}
+
+.ordersSearchInput{
+    flex:1;
+    min-width:0;
+    height:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:#171717;
+    font-size:14px;
+}
+
+.ordersSearchInput::placeholder{
+    color:#aaa;
+}
+
+.ordersLoading{
+    min-height:calc(100dvh - 120px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.ordersSpinner{
+    width:35px;
+    height:35px;
+    border:3px solid #eeeeee;
+    border-top-color:#f4b400;
+    border-radius:50%;
+    animation:ordersSpin .75s linear infinite;
+}
+
+@keyframes ordersSpin{
+    to{ transform:rotate(360deg); }
+}
+
+.ordersList{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.orderCard{
+    border:1px solid #ececec;
+    border-radius:17px;
+    background:#fff;
+    overflow:hidden;
+    box-shadow:0 3px 12px rgba(0,0,0,.035);
+}
+
+.orderHead{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 13px;
+    background:#fafafa;
+    border-bottom:1px solid #eeeeee;
+}
+
+.orderToken{
+    font-size:15px;
+    font-weight:900;
+    color:#171717;
+}
+
+.orderDate{
+    margin-top:3px;
+    font-size:11px;
+    color:#999;
+}
+
+.orderAmount{
+    font-size:17px;
+    font-weight:900;
+    color:#159447;
+    text-align:right;
+}
+
+.orderMeta{
+    margin-top:3px;
+    font-size:11px;
+    color:#888;
+    text-align:right;
+}
+
+.orderItems{
+    padding:9px 13px 11px;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.orderItemRow{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+}
+
+.orderItemName{
+    min-width:0;
+    font-weight:700;
+    color:#333;
+}
+
+.orderItemQty{
+    color:#888;
+    font-weight:700;
+}
+
+.orderItemPrice{
+    color:#171717;
+    font-weight:800;
+}
+
+.ordersEmpty{
+    padding:42px 10px;
+    text-align:center;
+    color:#999;
+    font-size:13px;
+}
+
+
+
+/* =========================================================
+   ALL ORDERS - TOP ADMIN AREA
+========================================================= */
+
+.allOrdersTopBtn{
+    margin-top:0 !important;
+    margin-bottom:18px;
+    height:52px;
+}
+
+
+
+/* =========================================================
+   ALL ORDERS BUTTON - LIGHT SMOOTH STYLE
+========================================================= */
+
+.allOrdersBtn{
+    background:#fff8df !important;
+    color:#9a6b00 !important;
+    border:1px solid #f2d77e !important;
+    box-shadow:0 4px 14px rgba(180,130,0,.08) !important;
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease !important;
+}
+
+.allOrdersBtn:active{
+    transform:scale(.975) !important;
+    background:#fff2bf !important;
+    box-shadow:0 2px 8px rgba(180,130,0,.06) !important;
+}
+
+
+/* =========================================================
+   DASHBOARD ALL ORDERS ACTION
+========================================================= */
+
+.dashboardEarningCard{
+    position:relative;
+}
+
+.dashboardAllOrdersBtn{
+    margin-top:11px;
+    height:34px;
+    width:100%;
+    border:1px solid #e7e7e7;
+    border-radius:11px;
+    background:#f8f8f8;
+    color:#555;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    transition:.18s ease;
+}
+
+.dashboardAllOrdersBtn:active{
+    transform:scale(.97);
+    background:#f1f1f1;
+}
+
+.dashboardAllOrdersBtn i{
+    font-size:11px;
+    color:#b07b00;
+}
+
+
+/* =========================================================
+   ALL ORDERS SWIPE BACK
+========================================================= */
+
+#allOrdersPage{
+    transition:transform .22s ease, opacity .22s ease;
+    will-change:transform;
+}
+
+#allOrdersPage.swiping{
+    transition:none;
+}
+
+#allOrdersPage.swipeClosingRight{
+    transform:translateX(100%);
+    opacity:.65;
+}
+
+#allOrdersPage.swipeClosingLeft{
+    transform:translateX(-100%);
+    opacity:.65;
+}
+
+
+
+/* =========================================================
+   BILL SEARCH
+========================================================= */
+
+.billSearchWrap{
+    width:100%;
+    margin:12px 0 16px;
+}
+
+.billSearchBox{
+    width:100%;
+    height:46px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:0 14px;
+
+    background:#f7f7f7;
+
+    border:1px solid #e9e9e9;
+    border-radius:14px;
+
+    transition:.2s ease;
+}
+
+.billSearchBox:focus-within{
+    background:#fff;
+
+    border-color:#e3a800;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(244,180,0,.08);
+}
+
+.billSearchBox i{
+    font-size:14px;
+    color:#999;
+}
+
+.billSearchInput{
+    flex:1;
+    min-width:0;
+    height:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    font-size:14px;
+    color:#171717;
+}
+
+.billSearchInput::placeholder{
+    color:#aaa;
+}
+
+.billNoResults{
+    padding:38px 10px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    color:#999;
+}
+
+
+
+/* =========================================================
+   SETTINGS PAGE
+========================================================= */
+
+.settingsShell{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:18px 16px 110px;
+}
+
+.settingsHeader{
+    margin-bottom:16px;
+}
+
+.settingsTitle{
+    font-size:22px;
+    font-weight:900;
+    color:#171717;
+}
+
+.settingsSub{
+    margin-top:4px;
+    font-size:12px;
+    color:#999;
+}
+
+.settingsCard{
+    width:100%;
+    padding:15px;
+    border:1px solid #eeeeee;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.035);
+}
+
+.settingsCardTitle{
+    font-size:16px;
+    font-weight:900;
+    color:#171717;
+    margin-bottom:4px;
+}
+
+.settingsCardSub{
+    font-size:12px;
+    color:#999;
+    margin-bottom:14px;
+}
+
+.printerStatusBox{
+    min-height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 13px;
+    border:1px solid #eeeeee;
+    border-radius:15px;
+    background:#fafafa;
+}
+
+.printerStatusLeft{
+    min-width:0;
+    flex:1;
+}
+
+.printerStatusTitle{
+    font-size:13px;
+    font-weight:800;
+    color:#171717;
+}
+
+.printerStatusText{
+    margin-top:3px;
+    font-size:11px;
+    color:#999;
+    word-break:break-word;
+}
+
+.printerStatusBadge{
+    flex:0 0 auto;
+    padding:6px 9px;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:900;
+    background:#f1f1f1;
+    color:#777;
+}
+
+.printerStatusBadge.connected{
+    background:#e9f8ed;
+    color:#159447;
+}
+
+.printerActionBtn{
+    width:100%;
+    height:48px;
+    margin-top:12px;
+    border:none;
+    border-radius:14px;
+    background:#f4b400;
+    color:#171717;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.printerActionBtn:active{
+    transform:scale(.99);
+}
+
+.printerActionBtn.secondary{
+    background:#f7f7f7;
+    color:#444;
+    border:1px solid #ececec;
+}
+
+.printerList{
+    margin-top:12px;
+    display:none;
+    flex-direction:column;
+    gap:8px;
+}
+
+.printerList.show{
+    display:flex;
+}
+
+.printerDeviceRow{
+    min-height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border:1px solid #eeeeee;
+    border-radius:14px;
+    background:#fff;
+}
+
+.printerDeviceName{
+    min-width:0;
+    flex:1;
+    font-size:13px;
+    font-weight:800;
+    color:#171717;
+    word-break:break-word;
+}
+
+.printerConnectBtn{
+    flex:0 0 auto;
+    height:34px;
+    padding:0 12px;
+    border:none;
+    border-radius:10px;
+    background:#fff3c8;
+    color:#9b6d00;
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.printerEmpty{
+    padding:18px 8px;
+    text-align:center;
+    font-size:12px;
+    color:#999;
+}
+
+
+
+/* =========================================================
+   SETTINGS HEADER REFRESH
+========================================================= */
+
+.settingsHeaderRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.printerRefreshBtn{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+
+    border:none;
+    border-radius:13px;
+
+    background:#f7f7f7;
+    color:#555;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:15px;
+    cursor:pointer;
+
+    transition:
+        transform .18s ease,
+        background .18s ease;
+}
+
+.printerRefreshBtn:active{
+    transform:scale(.94) rotate(20deg);
+    background:#eeeeee;
+}
+
+.printerRefreshBtn.loading i{
+    animation:printerRefreshSpin .7s linear infinite;
+}
+
+@keyframes printerRefreshSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div id="authLoader">
+    <div class="authLoaderSpinner"></div>
+</div>
+
+
+
+<!-- ========================================================
+     LOGIN PAGE
+======================================================== -->
+
+<div id="loginPage">
+
+
+    <!-- LOGIN IMAGE -->
+
+    <div class="loginImageWrap">
+
+        <img
+            src="logo.jpeg"
+            class="loginImage"
+            alt=""
+        >
+
+    </div>
+
+
+    <!-- LOGIN CONTENT -->
+
+    <div class="loginContent">
+
+
+        <div class="title">
+            Enter your mobile number
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div id="mobileBox" class="inputBox">
+
+            <div class="countryCode">
+                +91
+            </div>
+
+            <input
+                id="mobileInput"
+                class="mobileInput"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="Mobile number"
+                autocomplete="tel"
+            >
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div id="passwordBox" class="inputBox passwordBox">
+
+            <input
+                id="passwordInput"
+                class="passwordInput"
+                type="password"
+                placeholder="Password"
+                autocomplete="current-password"
+            >
+
+            <button
+                id="showPassBtn"
+                class="showPass"
+                type="button"
+            >
+                SHOW
+            </button>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="errorText"
+            class="errorText"
+        ></div>
+
+
+        <!-- LOGIN -->
+
+        <button
+            id="loginBtn"
+            class="loginBtn"
+            type="button"
+            disabled
+        >
+            Login
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ========================================================
+     MAIN PAGE
+======================================================== -->
+
+<div id="mainPage">
+
+
+    <!-- ====================================================
+         TOP LONG HANGING FOOD ICONS
+    ===================================================== -->
+
+    <header class="topNav">
+
+        <div class="hangingIcons">
+
+
+            <!-- COOKIE -->
+
+            <div class="hanger">
+
+                <div class="hangerIcon">
+
+                    <i
+                        class="fa-solid fa-cookie-bite"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- ICE CREAM -->
+
+            <div class="hanger">
+
+                <div class="hangerIcon">
+
+                    <i
+                        class="fa-solid fa-ice-cream"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- BURGER -->
+
+            <div class="hanger">
+
+                <div class="hangerIcon">
+
+                    <i
+                        class="fa-solid fa-burger"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- COFFEE -->
+
+            <div class="hanger">
+
+                <div class="hangerIcon">
+
+                    <i
+                        class="fa-solid fa-mug-hot"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- CAKE -->
+
+            <div class="hanger">
+
+                <div class="hangerIcon">
+
+                    <i
+                        class="fa-solid fa-cake-candles"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOD -->
+
+            <div class="hanger">
+
+                <div class="hangerIcon">
+
+                    <i
+                        class="fa-solid fa-bowl-food"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ====================================================
+         MAIN CONTENT
+    ===================================================== -->
+
+    <main class="mainContent">
+
+
+        <!-- BILL -->
+
+        <section
+            id="billSection"
+            class="pageSection active"
+        >
+
+            <div class="pageDemo">
+
+                <div class="billShell">
+
+                    <div class="billTop">
+                        <div class="billTitle">Create Bill</div>
+                        <div class="billSub">Select quantity for each item</div>
+                    </div>
+
+                    <div class="billSearchWrap">
+
+                        <div class="billSearchBox">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                id="billSearchInput"
+                                class="billSearchInput"
+                                type="search"
+                                placeholder="Search items"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div id="billItemsContainer">
+                        <div class="billLoading">
+        <div class="billLoadingSpinner" aria-label="Loading"></div>
+    </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DASHBOARD -->
+
+        <section
+            id="dashboardSection"
+            class="pageSection"
+        >
+
+            <div class="pageDemo">
+
+                <div class="dashboardShell">
+
+                    <div class="dashboardHeader">
+                        <div class="dashboardTitle">Dashboard</div>
+                        <div class="dashboardSub">Sales and order summary</div>
+                    </div>
+
+                    <div id="dashboardBody">
+
+                        <div class="dashboardLoading">
+                            <div class="dashboardSpinner"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADMIN -->
+
+        <section
+            id="adminSection"
+            class="pageSection"
+        >
+
+            <div class="pageDemo">
+
+                <div class="adminShell">
+
+                    <div class="adminTopRow">
+                        <div class="adminTitle">Menu Items</div>
+
+                        <button
+                            id="openAddItemBtn"
+                            class="addItemBtn"
+                            type="button"
+                            aria-label="Add menu item"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+
+
+                    <div class="adminSearchWrap">
+                        <div class="adminSearchBox">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                id="adminSearchInput"
+                                class="adminSearchInput"
+                                type="search"
+                                placeholder="Search menu items"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+
+                    <div id="adminStatus" class="adminStatus"></div>
+
+                    <div id="addPanel" class="addPanel">
+
+                        <div class="addGrid">
+
+                            <select id="newCategory" class="adminSelect">
+                                <option value="Puff Waffles">Puff Waffles</option>
+                                <option value="Stick Waffles">Stick Waffles</option>
+                                <option value="Special Waffles">Special Waffles</option>
+                                <option value="Premium Waffles">Premium Waffles</option>
+                                <option value="Brownies">Brownies</option>
+                                <option value="Double Decker Waffles">Double Decker Waffles</option>
+                            </select>
+
+                            <input
+                                id="newItemName"
+                                class="adminInput"
+                                type="text"
+                                placeholder="Item name"
+                            >
+
+                            <input
+                                id="newItemPrice"
+                                class="adminInput"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                inputmode="decimal"
+                                placeholder="Price"
+                            >
+
+                        </div>
+
+                        <div class="addActions">
+
+                            <button
+                                id="cancelAddBtn"
+                                class="iconActionBtn cancelTick"
+                                type="button"
+                                aria-label="Cancel"
+                            >
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+
+                            <button
+                                id="saveNewItemBtn"
+                                class="iconActionBtn saveTick"
+                                type="button"
+                                aria-label="Save item"
+                            >
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div id="adminMenuContainer">
+                        <div class="adminLoading">Loading menu...</div>
+                    </div>
+
+
+                    <!-- ADMIN ACCOUNTS -->
+
+                    <div class="adminAccountsSection">
+
+                        <div class="adminAccountsTop">
+
+                            <div class="adminAccountsTitle">
+                                Admin Accounts
+                            </div>
+
+                            <button
+                                id="openNewAdminBtn"
+                                class="adminAddBtn"
+                                type="button"
+                                aria-label="Create new admin"
+                            >
+                                <i class="fa-solid fa-user-plus"></i>
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="newAdminPanel"
+                            class="newAdminPanel"
+                        >
+
+                            <div class="addGrid">
+
+                                <input
+                                    id="newAdminMobile"
+                                    class="adminInput"
+                                    type="tel"
+                                    inputmode="numeric"
+                                    maxlength="10"
+                                    placeholder="10 digit mobile number"
+                                >
+
+                                <input
+                                    id="newAdminPassword"
+                                    class="adminInput"
+                                    type="password"
+                                    placeholder="Password"
+                                >
+
+                            </div>
+
+
+                            <div class="addActions">
+
+                                <button
+                                    id="cancelNewAdminBtn"
+                                    class="iconActionBtn cancelTick"
+                                    type="button"
+                                    aria-label="Cancel"
+                                >
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+
+                                <button
+                                    id="saveNewAdminBtn"
+                                    class="iconActionBtn saveTick"
+                                    type="button"
+                                    aria-label="Create admin"
+                                >
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="adminAccountsList"
+                            class="adminAccountsList"
+                        >
+                            <div class="adminLoading">
+                                Loading admins...
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOGOUT -->
+
+                    <div class="logoutArea">
+
+                        <button
+                            id="logoutBtn"
+                            class="logoutBtn"
+                            type="button"
+                        >
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            &nbsp; Logout
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+
+        <section
+            id="settingsSection"
+            class="pageSection"
+        >
+
+            <div class="pageDemo">
+
+                <div class="settingsShell">
+
+                    <div class="settingsHeader settingsHeaderRow">
+
+                        <div>
+                            <div class="settingsTitle">Settings</div>
+                            <div class="settingsSub">Printer connection</div>
+                        </div>
+
+                        <button
+                            id="scanPrintersBtn"
+                            class="printerRefreshBtn"
+                            type="button"
+                            aria-label="Refresh printers"
+                        >
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="settingsCard">
+
+                        <div class="settingsCardTitle">
+                            Print Settings
+                        </div>
+
+                        <div class="settingsCardSub">
+                            Connect a Bluetooth printer for bills
+                        </div>
+
+                        <div class="printerStatusBox">
+
+                            <div class="printerStatusLeft">
+
+                                <div class="printerStatusTitle">
+                                    Bluetooth Printer
+                                </div>
+
+                                <div
+                                    id="printerStatusText"
+                                    class="printerStatusText"
+                                >
+                                    Not connected
+                                </div>
+
+                            </div>
+
+                            <div
+                                id="printerStatusBadge"
+                                class="printerStatusBadge"
+                            >
+                                Offline
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="printerList"
+                            class="printerList"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ====================================================
+         FLOATING CART BAR
+    ===================================================== -->
+
+    <div
+        id="floatingCartBar"
+        class="floatingCartBar"
+    >
+
+        <div class="cartSummary">
+
+            <div class="cartCounts">
+
+                <span
+                    id="cartItemsCount"
+                    class="cartCountText"
+                >
+                    0 items
+                </span>
+
+                <span class="cartDot">•</span>
+
+                <span
+                    id="cartQtyCount"
+                    class="cartCountText"
+                >
+                    Qty 0
+                </span>
+
+            </div>
+
+            <div
+                id="cartTotal"
+                class="cartTotal"
+            >
+                ₹0
+            </div>
+
+        </div>
+
+        <button
+            id="cartPrintBtn"
+            class="cartPrintBtn"
+            type="button"
+            aria-label="Print bill"
+        >
+            <i class="fa-solid fa-print"></i>
+        </button>
+
+    </div>
+
+
+    <!-- ====================================================
+         BOTTOM NAVIGATION
+    ===================================================== -->
+
+    <div class="bottomNavWrap">
+
+        <nav class="bottomNav">
+
+
+            <!-- BILL -->
+
+            <button
+                type="button"
+                class="navItem active"
+                data-page="billSection"
+            >
+
+                <i
+                    class="fa-solid fa-receipt"
+                ></i>
+
+                <span>
+                    Bill
+                </span>
+
+            </button>
+
+
+            <!-- DASHBOARD -->
+
+            <button
+                type="button"
+                class="navItem"
+                data-page="dashboardSection"
+            >
+
+                <i
+                    class="fa-solid fa-chart-line"
+                ></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </button>
+
+
+            <!-- ADMIN -->
+
+            <button
+                type="button"
+                class="navItem"
+                data-page="adminSection"
+            >
+
+                <i
+                    class="fa-solid fa-user"
+                ></i>
+
+                <span>
+                    Admin
+                </span>
+
+            </button>
+
+
+            <!-- SETTINGS -->
+
+            <button
+                type="button"
+                class="navItem"
+                data-page="settingsSection"
+            >
+
+                <i
+                    class="fa-solid fa-gear"
+                ></i>
+
+                <span>
+                    Settings
+                </span>
+
+            </button>
+
+
+        </nav>
+
+    </div>
+
+
+</div>
+
+
+<!-- ========================================================
+     ALL ORDERS PAGE
+======================================================== -->
+
+<div id="allOrdersPage">
+
+    <div class="ordersTopBar">
+
+        <button
+            id="closeAllOrdersBtn"
+            class="ordersTopSide"
+            type="button"
+            aria-label="Back"
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="ordersTopTitle">
+            All Orders
+        </div>
+
+        <button
+            id="closeAllOrdersBtnRight"
+            class="ordersTopSide"
+            type="button"
+            aria-label="Close"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+    </div>
+
+
+    <div class="ordersBody">
+
+        <div class="ordersSearchWrap">
+
+            <div class="ordersSearchBox">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    id="ordersSearchInput"
+                    class="ordersSearchInput"
+                    type="search"
+                    placeholder="Search token, date, item..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div id="ordersContent">
+
+            <div class="ordersLoading">
+                <div class="ordersSpinner"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loginPage =
+    document.getElementById(
+        "loginPage"
+    );
+
+const mainPage =
+    document.getElementById(
+        "mainPage"
+    );
+
+const mobileInput =
+    document.getElementById(
+        "mobileInput"
+    );
+
+const passwordInput =
+    document.getElementById(
+        "passwordInput"
+    );
+
+const showPassBtn =
+    document.getElementById(
+        "showPassBtn"
+    );
+
+const loginBtn =
+    document.getElementById(
+        "loginBtn"
+    );
+
+const errorText =
+    document.getElementById(
+        "errorText"
+    );
+
+const mobileBox =
+    document.getElementById(
+        "mobileBox"
+    );
+
+const passwordBox =
+    document.getElementById(
+        "passwordBox"
+    );
+
+
+/* =========================================================
+   MOBILE INPUT
+========================================================= */
+
+mobileInput.addEventListener(
+    "input",
+    function(){
+
+        this.value =
+            this.value
+                .replace(/\D/g,"")
+                .slice(0,10);
+
+        hideError();
+
+        checkForm();
+
+    }
+);
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+passwordInput.addEventListener(
+    "input",
+    function(){
+
+        hideError();
+
+        checkForm();
+
+    }
+);
+
+
+/* =========================================================
+   CHECK FORM
+========================================================= */
+
+function checkForm(){
+
+    const mobile =
+        mobileInput
+            .value
+            .trim();
+
+    const password =
+        passwordInput
+            .value
+            .trim();
+
+
+    if(
+        mobile.length === 10 &&
+        password.length > 0
+    ){
+
+        loginBtn.disabled =
+            false;
+
+        loginBtn
+            .classList
+            .add(
+                "active"
+            );
+
+    }
+
+    else{
+
+        loginBtn.disabled =
+            true;
+
+        loginBtn
+            .classList
+            .remove(
+                "active"
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW / HIDE PASSWORD
+========================================================= */
+
+showPassBtn.addEventListener(
+    "click",
+    function(){
+
+        if(
+            passwordInput.type ===
+            "password"
+        ){
+
+            passwordInput.type =
+                "text";
+
+            showPassBtn.textContent =
+                "HIDE";
+
+        }
+
+        else{
+
+            passwordInput.type =
+                "password";
+
+            showPassBtn.textContent =
+                "SHOW";
+
+        }
+
+        passwordInput.focus();
+
+    }
+);
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginBtn.addEventListener(
+    "click",
+    async function(){
+
+        const mobile =
+            mobileInput.value.trim();
+
+        const password =
+            passwordInput.value.trim();
+
+
+        if(mobile.length !== 10){
+
+            showError(
+                "Enter a valid 10 digit mobile number",
+                "mobile"
+            );
+
+            mobileInput.focus();
+
+            return;
+        }
+
+
+        if(password.length === 0){
+
+            showError(
+                "Enter your password",
+                "password"
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        hideError();
+
+        loginBtn.disabled = true;
+
+        loginBtn.classList.add(
+            "loading"
+        );
+
+        loginBtn.innerHTML =
+            '<span class="loginBtnSpinner" aria-hidden="true"></span>';
+
+
+        const { data, error } =
+            await db.rpc(
+                "admin_login",
+                {
+                    p_mobile:mobile,
+                    p_password:password
+                }
+            );
+
+
+        loginBtn.classList.remove(
+            "loading"
+        );
+
+        loginBtn.textContent =
+            "Login";
+
+        checkForm();
+
+
+        if(error){
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            showError(
+                "Unable to login. Please try again.",
+                "password"
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        const result =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        if(
+            !result ||
+            !result.session_token
+        ){
+
+            showError(
+                "Wrong mobile number or password",
+                "password"
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        saveAdminSession(
+            result.session_token,
+            result.admin_mobile
+        );
+
+        openMainApp();
+
+    }
+);
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function markLoginInvalid(field){
+
+    const box =
+        field === "mobile"
+            ? mobileBox
+            : passwordBox;
+
+    if(!box){
+        return;
+    }
+
+    box.classList.add(
+        "loginInvalid"
+    );
+
+    box.classList.remove(
+        "shake"
+    );
+
+    void box.offsetWidth;
+
+    box.classList.add(
+        "shake"
+    );
+
+}
+
+
+function showError(
+    message,
+    field = "password"
+){
+
+    errorText.textContent =
+        message;
+
+    errorText
+        .classList
+        .add(
+            "show"
+        );
+
+    markLoginInvalid(
+        field
+    );
+
+}
+
+
+function hideError(){
+
+    errorText.textContent =
+        "";
+
+    errorText
+        .classList
+        .remove(
+            "show"
+        );
+
+    mobileBox
+        ?.classList
+        .remove(
+            "loginInvalid",
+            "shake"
+        );
+
+    passwordBox
+        ?.classList
+        .remove(
+            "loginInvalid",
+            "shake"
+        );
+
+}
+
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://tsqxwxxgqiqylrynqcvv.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_eoxzQsEt9A8Z6VpkrMCg-g_ZffcH9Cu";
+
+const db =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* =========================================================
+   AUTH SESSION
+========================================================= */
+
+const SESSION_KEY =
+    "goldenWaffleAdminSession";
+
+const authLoader =
+    document.getElementById("authLoader");
+
+let currentAdminSession =
+    null;
+
+let currentAdminMobile =
+    null;
+
+
+function saveAdminSession(
+    token,
+    mobile
+){
+
+    currentAdminSession =
+        token;
+
+    currentAdminMobile =
+        mobile;
+
+    localStorage.setItem(
+        SESSION_KEY,
+        JSON.stringify({
+            token:token,
+            mobile:mobile
+        })
+    );
+
+}
+
+
+function clearAdminSession(){
+
+    currentAdminSession =
+        null;
+
+    currentAdminMobile =
+        null;
+
+    localStorage.removeItem(
+        SESSION_KEY
+    );
+
+}
+
+
+function getStoredAdminSession(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(
+                SESSION_KEY
+            );
+
+        if(!raw){
+            return null;
+        }
+
+        const parsed =
+            JSON.parse(raw);
+
+        if(
+            !parsed ||
+            !parsed.token
+        ){
+            return null;
+        }
+
+        return parsed;
+
+    }
+    catch(error){
+
+        return null;
+
+    }
+
+}
+
+
+function hideAuthLoader(){
+
+    if(authLoader){
+        authLoader.style.display =
+            "none";
+    }
+
+}
+
+
+async function restoreAdminSession(){
+
+    const stored =
+        getStoredAdminSession();
+
+
+    if(!stored){
+
+        hideAuthLoader();
+        return;
+    }
+
+
+    const { data, error } =
+        await db.rpc(
+            "admin_validate_session",
+            {
+                p_session_token:
+                    stored.token
+            }
+        );
+
+
+    if(error){
+
+        clearAdminSession();
+        hideAuthLoader();
+        return;
+    }
+
+
+    const result =
+        Array.isArray(data)
+            ? data[0]
+            : data;
+
+
+    if(
+        result &&
+        result.valid === true
+    ){
+
+        saveAdminSession(
+            stored.token,
+            result.admin_mobile
+        );
+
+        openMainApp();
+
+    }
+    else{
+
+        clearAdminSession();
+
+    }
+
+
+    hideAuthLoader();
+
+}
+
+
+/* =========================================================
+   OPEN MAIN APP
+========================================================= */
+
+function openMainApp(){
+
+    loginPage.style.display =
+        "none";
+
+    mainPage.style.display =
+        "block";
+
+    hideAuthLoader();
+
+    startAdmin();
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+
+/* =========================================================
+   DASHBOARD DATA
+========================================================= */
+
+async function loadDashboard(){
+
+    if(!dashboardBody){
+        return;
+    }
+
+
+    dashboardBody.innerHTML =
+        '<div class="dashboardLoading"><div class="dashboardSpinner"></div></div>';
+
+
+    const { data, error } =
+        await db.rpc(
+            "dashboard_report",
+            {
+                p_session_token:
+                    currentAdminSession
+            }
+        );
+
+
+    if(error){
+
+        dashboardBody.innerHTML =
+            '<div class="dashboardEmpty">Could not load dashboard.</div>';
+
+        console.error(
+            "Dashboard load error:",
+            error
+        );
+
+        return;
+    }
+
+
+    dashboardData =
+        data || [];
+
+    dashboardLoaded =
+        true;
+
+    renderDashboard();
+
+}
+
+
+/* =========================================================
+   RENDER DASHBOARD
+========================================================= */
+
+function renderDashboard(){
+
+    if(!dashboardBody){
+        return;
+    }
+
+
+    const filtered =
+        dashboardData.filter(
+            function(row){
+
+                if(!dashboardSearchQuery){
+                    return true;
+                }
+
+                return String(
+                    row.report_date || ""
+                )
+                .toLowerCase()
+                .includes(
+                    dashboardSearchQuery
+                );
+
+            }
+        );
+
+
+    const totalOrders =
+        dashboardData.reduce(
+            (sum,row) =>
+                sum +
+                Number(
+                    row.total_orders || 0
+                ),
+            0
+        );
+
+
+    const totalEarnings =
+        dashboardData.reduce(
+            (sum,row) =>
+                sum +
+                Number(
+                    row.total_earning || 0
+                ),
+            0
+        );
+
+
+    dashboardBody.innerHTML =
+        `
+        <div class="dashboardStats">
+
+            <div class="statCard">
+
+                <div class="statIcon">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+
+                <div class="statLabel">
+                    Total Orders
+                </div>
+
+                <div class="statValue">
+                    ${totalOrders}
+                </div>
+
+            </div>
+
+
+            <div class="statCard dashboardEarningCard">
+
+                <div class="statIcon">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                </div>
+
+                <div class="statLabel">
+                    Total Earnings
+                </div>
+
+                <div class="statValue">
+                    ₹${formatPrice(totalEarnings)}
+                </div>
+
+                <button
+                    id="dashboardAllOrdersBtn"
+                    class="dashboardAllOrdersBtn"
+                    type="button"
+                >
+                    All Orders
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboardSearchWrap">
+
+            <div class="dashboardSearchBox">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    id="dashboardSearchInput"
+                    class="dashboardSearchInput"
+                    type="search"
+                    placeholder="Search date, e.g. 2026-08-15"
+                    autocomplete="off"
+                    value="${escapeHtml(dashboardSearchQuery)}"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="chartCard">
+
+            <div class="chartTitle">
+                Earnings Graph
+            </div>
+
+            <div class="chartSub">
+                Daily earnings
+            </div>
+
+            <div class="chartCanvasWrap">
+                <canvas id="earningsChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <div class="dayReportTitle">
+            Day Report
+        </div>
+
+
+        <div
+            id="dayReportList"
+            class="dayReportList"
+        >
+        </div>
+        `;
+
+
+    const dashboardAllOrdersBtn =
+        document.getElementById(
+            "dashboardAllOrdersBtn"
+        );
+
+
+    if(dashboardAllOrdersBtn){
+
+        dashboardAllOrdersBtn.addEventListener(
+            "click",
+            openAllOrdersPage
+        );
+
+    }
+
+
+    const searchInput =
+        document.getElementById(
+            "dashboardSearchInput"
+        );
+
+
+    searchInput.addEventListener(
+        "input",
+        function(){
+
+            dashboardSearchQuery =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+            renderDashboard();
+
+            setTimeout(
+                function(){
+
+                    const input =
+                        document.getElementById(
+                            "dashboardSearchInput"
+                        );
+
+                    if(input){
+                        input.focus();
+                        input.setSelectionRange(
+                            input.value.length,
+                            input.value.length
+                        );
+                    }
+
+                },
+                0
+            );
+
+        }
+    );
+
+
+    renderDayReport(
+        filtered
+    );
+
+    renderEarningsChart();
+
+}
+
+
+/* =========================================================
+   DAY REPORT
+========================================================= */
+
+function renderDayReport(rows){
+
+    const list =
+        document.getElementById(
+            "dayReportList"
+        );
+
+
+    if(!list){
+        return;
+    }
+
+
+    if(rows.length === 0){
+
+        list.innerHTML =
+            '<div class="dashboardEmpty">No matching day report.</div>';
+
+        return;
+    }
+
+
+    list.innerHTML =
+        "";
+
+
+    rows.forEach(
+        function(row){
+
+            const reportRow =
+                document.createElement(
+                    "div"
+                );
+
+            reportRow.className =
+                "dayReportRow";
+
+
+            const left =
+                document.createElement(
+                    "div"
+                );
+
+            left.className =
+                "dayReportLeft";
+
+
+            const date =
+                document.createElement(
+                    "div"
+                );
+
+            date.className =
+                "dayReportDate";
+
+            date.textContent =
+                formatDashboardDate(
+                    row.report_date
+                );
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+            meta.className =
+                "dayReportMeta";
+
+            meta.textContent =
+                Number(
+                    row.total_orders || 0
+                ) +
+                " orders • Qty " +
+                Number(
+                    row.total_quantity || 0
+                );
+
+
+            const amount =
+                document.createElement(
+                    "div"
+                );
+
+            amount.className =
+                "dayReportAmount";
+
+            amount.textContent =
+                "₹" +
+                formatPrice(
+                    row.total_earning || 0
+                );
+
+
+            left.appendChild(
+                date
+            );
+
+            left.appendChild(
+                meta
+            );
+
+            reportRow.appendChild(
+                left
+            );
+
+            reportRow.appendChild(
+                amount
+            );
+
+            list.appendChild(
+                reportRow
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD CHART
+========================================================= */
+
+function renderEarningsChart(){
+
+    const canvas =
+        document.getElementById(
+            "earningsChart"
+        );
+
+
+    if(!canvas){
+        return;
+    }
+
+
+    if(dashboardChart){
+
+        dashboardChart.destroy();
+
+        dashboardChart =
+            null;
+
+    }
+
+
+    const chartRows =
+        [...dashboardData]
+            .sort(
+                (a,b) =>
+                    String(a.report_date)
+                        .localeCompare(
+                            String(b.report_date)
+                        )
+            )
+            .slice(-14);
+
+
+    dashboardChart =
+        new Chart(
+            canvas,
+            {
+                type:"line",
+
+                data:{
+                    labels:
+                        chartRows.map(
+                            row =>
+                                shortDashboardDate(
+                                    row.report_date
+                                )
+                        ),
+
+                    datasets:[
+                        {
+                            label:"Earnings",
+                            data:
+                                chartRows.map(
+                                    row =>
+                                        Number(
+                                            row.total_earning || 0
+                                        )
+                                ),
+                            borderWidth:2,
+                            tension:.35,
+                            fill:false,
+                            pointRadius:3,
+                            pointHoverRadius:4
+                        }
+                    ]
+                },
+
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+
+                    plugins:{
+                        legend:{
+                            display:false
+                        }
+                    },
+
+                    scales:{
+                        x:{
+                            grid:{
+                                display:false
+                            }
+                        },
+
+                        y:{
+                            beginAtZero:true,
+
+                            ticks:{
+                                callback:
+                                    function(value){
+                                        return "₹" + value;
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+}
+
+
+/* =========================================================
+   DASHBOARD HELPERS
+========================================================= */
+
+function formatDashboardDate(value){
+
+    if(!value){
+        return "";
+    }
+
+    const date =
+        new Date(
+            value + "T00:00:00"
+        );
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+        return value;
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+function shortDashboardDate(value){
+
+    if(!value){
+        return "";
+    }
+
+    const date =
+        new Date(
+            value + "T00:00:00"
+        );
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+        return value;
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short"
+        }
+    );
+
+}
+
+
+function escapeHtml(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   ADMIN MENU ELEMENTS
+========================================================= */
+
+const adminMenuContainer =
+    document.getElementById("adminMenuContainer");
+
+const adminStatus =
+    document.getElementById("adminStatus");
+
+const adminSearchInput =
+    document.getElementById("adminSearchInput");
+
+const openAddItemBtn =
+    document.getElementById("openAddItemBtn");
+
+const addPanel =
+    document.getElementById("addPanel");
+
+const newCategory =
+    document.getElementById("newCategory");
+
+const newItemName =
+    document.getElementById("newItemName");
+
+const newItemPrice =
+    document.getElementById("newItemPrice");
+
+const saveNewItemBtn =
+    document.getElementById("saveNewItemBtn");
+
+const cancelAddBtn =
+    document.getElementById("cancelAddBtn");
+
+
+/* =========================================================
+   ADMIN ACCOUNT ELEMENTS
+========================================================= */
+
+const openNewAdminBtn =
+    document.getElementById("openNewAdminBtn");
+
+const newAdminPanel =
+    document.getElementById("newAdminPanel");
+
+const newAdminMobile =
+    document.getElementById("newAdminMobile");
+
+const newAdminPassword =
+    document.getElementById("newAdminPassword");
+
+const cancelNewAdminBtn =
+    document.getElementById("cancelNewAdminBtn");
+
+const saveNewAdminBtn =
+    document.getElementById("saveNewAdminBtn");
+
+const adminAccountsList =
+    document.getElementById("adminAccountsList");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+
+/* =========================================================
+   PRINTER SETTINGS
+========================================================= */
+
+const scanPrintersBtn =
+    document.getElementById("scanPrintersBtn");
+
+const printerList =
+    document.getElementById("printerList");
+
+const printerStatusText =
+    document.getElementById("printerStatusText");
+
+const printerStatusBadge =
+    document.getElementById("printerStatusBadge");
+
+let selectedPrinterName =
+    localStorage.getItem(
+        "goldenWafflePrinterName"
+    ) || "";
+
+
+const openAllOrdersBtn =
+    document.getElementById("openAllOrdersBtn");
+
+const allOrdersPage =
+    document.getElementById("allOrdersPage");
+
+const closeAllOrdersBtn =
+    document.getElementById("closeAllOrdersBtn");
+
+const closeAllOrdersBtnRight =
+    document.getElementById("closeAllOrdersBtnRight");
+
+const ordersSearchInput =
+    document.getElementById("ordersSearchInput");
+
+const ordersContent =
+    document.getElementById("ordersContent");
+
+let allOrdersData = [];
+let allOrdersLoaded = false;
+let orderSearchQuery = "";
+
+
+/* =========================================================
+   BILL ELEMENTS
+========================================================= */
+
+const billItemsContainer =
+    document.getElementById("billItemsContainer");
+
+const billSearchInput =
+    document.getElementById("billSearchInput");
+
+let billSearchQuery =
+    "";
+
+const floatingCartBar =
+    document.getElementById("floatingCartBar");
+
+const cartItemsCount =
+    document.getElementById("cartItemsCount");
+
+const cartQtyCount =
+    document.getElementById("cartQtyCount");
+
+const cartTotal =
+    document.getElementById("cartTotal");
+
+const cartPrintBtn =
+    document.getElementById("cartPrintBtn");
+
+const billQuantities = {};
+
+
+/* =========================================================
+   DASHBOARD STATE
+========================================================= */
+
+const dashboardBody =
+    document.getElementById("dashboardBody");
+
+let dashboardLoaded = false;
+let dashboardData = [];
+let dashboardChart = null;
+let dashboardSearchQuery = "";
+
+const BILL_CART_STORAGE_KEY =
+    "goldenWaffleBillCart";
+
+
+function saveBillCart(){
+
+    localStorage.setItem(
+        BILL_CART_STORAGE_KEY,
+        JSON.stringify(
+            billQuantities
+        )
+    );
+
+}
+
+
+function restoreBillCart(){
+
+    try{
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    BILL_CART_STORAGE_KEY
+                ) || "{}"
+            );
+
+        Object.keys(saved)
+            .forEach(
+                function(id){
+
+                    const qty =
+                        Number(saved[id]);
+
+                    if(
+                        Number.isFinite(qty) &&
+                        qty > 0
+                    ){
+
+                        billQuantities[id] =
+                            Math.floor(qty);
+
+                    }
+
+                }
+            );
+
+    }
+    catch(error){
+
+        console.error(
+            "Could not restore cart:",
+            error
+        );
+
+    }
+
+}
+
+
+/* Restore quantities immediately on page load */
+restoreBillCart();
+
+
+const CATEGORY_ORDER = [
+    "Puff Waffles",
+    "Stick Waffles",
+    "Special Waffles",
+    "Premium Waffles",
+    "Brownies",
+    "Double Decker Waffles"
+];
+
+let menuItems = [];
+let adminStarted = false;
+let menuRealtimeChannel = null;
+let adminSearchQuery = "";
+let adminAccounts = [];
+
+
+/* =========================================================
+   ADMIN STATUS
+========================================================= */
+
+let statusTimer = null;
+
+function setAdminStatus(
+    message,
+    isError = false
+){
+
+    clearTimeout(statusTimer);
+
+    adminStatus.textContent =
+        message || "";
+
+    adminStatus.classList.toggle(
+        "error",
+        isError
+    );
+
+    if(message){
+
+        statusTimer =
+            setTimeout(
+                function(){
+
+                    adminStatus.textContent =
+                        "";
+
+                    adminStatus.classList.remove(
+                        "error"
+                    );
+
+                },
+                1800
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   START ADMIN
+========================================================= */
+
+async function startAdmin(){
+
+    if(adminStarted){
+        return;
+    }
+
+    adminStarted = true;
+
+    await Promise.all([
+        loadMenuItems(),
+        loadAdminAccounts(),
+        loadDashboard()
+    ]);
+
+    subscribeMenuRealtime();
+
+}
+
+
+/* =========================================================
+   LOAD MENU
+========================================================= */
+
+async function loadMenuItems(){
+
+    adminMenuContainer.innerHTML =
+        '<div class="adminLoading">Loading menu...</div>';
+
+    const { data, error } =
+        await db
+            .from("menu_items")
+            .select(
+                "id,category,name,price,is_available,sort_order"
+            )
+            .order("category")
+            .order("sort_order");
+
+
+    if(error){
+
+        adminMenuContainer.innerHTML =
+            '<div class="emptyAdmin">Could not load menu.</div>';
+
+        setAdminStatus(
+            error.message,
+            true
+        );
+
+        return;
+    }
+
+
+    menuItems =
+        data || [];
+
+    renderAdminMenu();
+    renderBillItems();
+
+}
+
+
+
+
+/* =========================================================
+   BILL SEARCH
+========================================================= */
+
+billSearchInput.addEventListener(
+    "input",
+    function(){
+
+        billSearchQuery =
+            this.value
+                .trim()
+                .toLowerCase();
+
+        renderBillItems();
+
+    }
+);
+
+
+/* =========================================================
+   RENDER BILL ITEMS
+========================================================= */
+
+function renderBillItems(){
+
+    if(!billItemsContainer){
+        return;
+    }
+
+
+    if(menuItems.length === 0){
+
+        billItemsContainer.innerHTML =
+            '<div class="billEmpty">No menu items available.</div>';
+
+        return;
+    }
+
+
+    billItemsContainer.innerHTML =
+        "";
+
+    let renderedBillCount =
+        0;
+
+
+    CATEGORY_ORDER.forEach(
+        function(category){
+
+            const items =
+                menuItems
+                    .filter(
+                        item =>
+                            item.category === category
+                    )
+                    .filter(
+                        item => {
+
+                            if(!billSearchQuery){
+                                return true;
+                            }
+
+                            const haystack =
+                                (
+                                    String(item.name || "") +
+                                    " " +
+                                    String(item.category || "")
+                                ).toLowerCase();
+
+                            return haystack.includes(
+                                billSearchQuery
+                            );
+
+                        }
+                    )
+                    .sort(
+                        (a,b) =>
+                            (a.sort_order || 0) -
+                            (b.sort_order || 0)
+                    );
+
+
+            if(items.length === 0){
+                return;
+            }
+
+            renderedBillCount +=
+                items.length;
+
+
+            const block =
+                document.createElement(
+                    "div"
+                );
+
+            block.className =
+                "billCategory";
+
+
+            const heading =
+                document.createElement(
+                    "div"
+                );
+
+            heading.className =
+                "billCategoryTitle";
+
+            heading.textContent =
+                category;
+
+
+            const grid =
+                document.createElement(
+                    "div"
+                );
+
+            grid.className =
+                "billGrid";
+
+
+            items.forEach(
+                function(item){
+
+                    grid.appendChild(
+                        createBillItemCard(
+                            item
+                        )
+                    );
+
+                }
+            );
+
+
+            block.appendChild(
+                heading
+            );
+
+            block.appendChild(
+                grid
+            );
+
+            billItemsContainer
+                .appendChild(
+                    block
+                );
+
+        }
+    );
+
+
+    if(renderedBillCount === 0){
+
+        billItemsContainer.innerHTML =
+            '<div class="billNoResults">No matching items.</div>';
+
+    }
+
+
+    updateFloatingCart();
+
+}
+
+
+
+
+/* =========================================================
+   PRINT + SAVE BILL
+========================================================= */
+
+function buildBillSnapshot(){
+
+    const selectedItems =
+        [];
+
+    let uniqueItems =
+        0;
+
+    let totalQuantity =
+        0;
+
+    let totalAmount =
+        0;
+
+
+    menuItems.forEach(
+        function(item){
+
+            const qty =
+                billQuantities[
+                    String(item.id)
+                ] || 0;
+
+
+            if(qty <= 0){
+                return;
+            }
+
+
+            const price =
+                Number(
+                    item.price || 0
+                );
+
+            const lineTotal =
+                price * qty;
+
+
+            selectedItems.push({
+                id:item.id,
+                category:item.category,
+                name:item.name,
+                price:price,
+                quantity:qty,
+                line_total:lineTotal
+            });
+
+
+            uniqueItems +=
+                1;
+
+            totalQuantity +=
+                qty;
+
+            totalAmount +=
+                lineTotal;
+
+        }
+    );
+
+
+    return {
+        items:selectedItems,
+        total_items:uniqueItems,
+        total_quantity:totalQuantity,
+        total_amount:totalAmount
+    };
+
+}
+
+
+function clearBillCart(){
+
+    Object.keys(
+        billQuantities
+    ).forEach(
+        function(id){
+
+            billQuantities[id] =
+                0;
+
+        }
+    );
+
+
+    saveBillCart();
+    renderBillItems();
+    updateFloatingCart();
+
+}
+
+
+function resetPrintButton(){
+
+    cartPrintBtn.disabled =
+        false;
+
+    cartPrintBtn.classList.remove(
+        "printSaved",
+        "printError"
+    );
+
+    cartPrintBtn.innerHTML =
+        '<i class="fa-solid fa-print"></i>';
+
+}
+
+
+cartPrintBtn.addEventListener(
+    "click",
+    async function(){
+
+        const bill =
+            buildBillSnapshot();
+
+
+        if(
+            bill.total_quantity <= 0
+        ){
+            return;
+        }
+
+
+        cartPrintBtn.disabled =
+            true;
+
+        cartPrintBtn.classList.remove(
+            "printSaved",
+            "printError"
+        );
+
+        cartPrintBtn.innerHTML =
+            '<span class="printBtnSpinner" aria-hidden="true"></span>';
+
+
+        /*
+         * 1. SAVE BILL TO SUPABASE FIRST
+         */
+        const { data, error } =
+            await db.rpc(
+                "save_bill",
+                {
+                    p_session_token:
+                        currentAdminSession,
+
+                    p_items:
+                        bill.items
+                }
+            );
+
+
+        if(error){
+
+            console.error(
+                "Save bill error:",
+                error
+            );
+
+            showPrintError(
+                "Could not save bill"
+            );
+
+            return;
+        }
+
+
+        const savedBill =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        /*
+         * 2. CREATE PRINT PAYLOAD FOR ANDROID KOTLIN
+         */
+        const printPayload = {
+
+            token_number:
+                savedBill?.token_number || "",
+
+            created_at:
+                savedBill?.created_at ||
+                new Date().toISOString(),
+
+            total_items:
+                bill.total_items,
+
+            total_quantity:
+                bill.total_quantity,
+
+            total_amount:
+                bill.total_amount,
+
+            items:
+                bill.items
+
+        };
+
+
+        /*
+         * 3. SEND BILL DETAILS TO KOTLIN.
+         *
+         * Kotlin receives this JSON at:
+         * AndroidPrinter.printBill(json)
+         *
+         * Kotlin must call one of these after printing:
+         *
+         * window.onPrintSuccess()
+         * window.onPrintError("message")
+         */
+        if(
+            window.AndroidPrinter &&
+            typeof window.AndroidPrinter.printBill ===
+            "function"
+        ){
+
+            try{
+
+                window.AndroidPrinter.printBill(
+                    JSON.stringify(
+                        printPayload
+                    )
+                );
+
+            }
+            catch(printError){
+
+                console.error(
+                    "Android print bridge error:",
+                    printError
+                );
+
+                showPrintError(
+                    "Printer connection failed"
+                );
+
+            }
+
+        }
+        else{
+
+            /*
+             * Browser testing only.
+             * Do NOT clear the cart because physical
+             * printer confirmation was not received.
+             */
+            showPrintError(
+                "Open this page inside the Android app to print"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PRINT CALLBACKS FROM ANDROID KOTLIN
+========================================================= */
+
+window.onPrintSuccess =
+    function(){
+
+        cartPrintBtn.classList.remove(
+            "printError"
+        );
+
+        cartPrintBtn.classList.add(
+            "printSaved"
+        );
+
+        cartPrintBtn.innerHTML =
+            '<i class="fa-solid fa-check"></i>';
+
+
+        /*
+         * Clear cart ONLY after Kotlin confirms
+         * that bytes were sent to the printer.
+         */
+        setTimeout(
+            function(){
+
+                clearBillCart();
+
+                dashboardLoaded =
+                    false;
+
+                loadDashboard();
+
+                resetPrintButton();
+
+            },
+            850
+        );
+
+    };
+
+
+window.onPrintError =
+    function(message){
+
+        showPrintError(
+            message ||
+            "Printing failed"
+        );
+
+    };
+
+
+function showPrintError(message){
+
+    console.error(
+        "Print error:",
+        message
+    );
+
+    cartPrintBtn.classList.remove(
+        "printSaved"
+    );
+
+    cartPrintBtn.classList.add(
+        "printError"
+    );
+
+    cartPrintBtn.innerHTML =
+        '<i class="fa-solid fa-xmark"></i>';
+
+
+    setTimeout(
+        resetPrintButton,
+        1300
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE FLOATING CART
+========================================================= */
+
+function updateFloatingCart(){
+
+    let uniqueItems =
+        0;
+
+    let totalQuantity =
+        0;
+
+    let totalAmount =
+        0;
+
+
+    menuItems.forEach(
+        function(item){
+
+            const qty =
+                billQuantities[
+                    String(item.id)
+                ] || 0;
+
+
+            if(qty > 0){
+
+                uniqueItems +=
+                    1;
+
+            }
+
+
+            totalQuantity +=
+                qty;
+
+
+            totalAmount +=
+                qty *
+                Number(
+                    item.price || 0
+                );
+
+        }
+    );
+
+
+    if(totalQuantity > 0){
+
+        floatingCartBar.classList.add(
+            "show"
+        );
+
+
+        cartItemsCount.textContent =
+            uniqueItems === 1
+                ? "1 item"
+                : uniqueItems + " items";
+
+
+        cartQtyCount.textContent =
+            "Qty " +
+            totalQuantity;
+
+
+        cartTotal.textContent =
+            "₹" +
+            formatPrice(
+                totalAmount
+            );
+
+    }
+
+    else{
+
+        floatingCartBar.classList.remove(
+            "show"
+        );
+
+
+        cartItemsCount.textContent =
+            "0 items";
+
+
+        cartQtyCount.textContent =
+            "Qty 0";
+
+
+        cartTotal.textContent =
+            "₹0";
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE BILL ITEM CARD
+========================================================= */
+
+function createBillItemCard(item){
+
+    const id =
+        String(item.id);
+
+    if(
+        typeof billQuantities[id] !==
+        "number"
+    ){
+
+        billQuantities[id] =
+            0;
+
+    }
+
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+    card.className =
+        "billItemCard";
+
+    card.dataset.id =
+        id;
+
+
+    if(
+        item.is_available === false
+    ){
+
+        card.classList.add(
+            "outOfStock"
+        );
+
+    }
+
+
+    const top =
+        document.createElement(
+            "div"
+        );
+
+
+    const name =
+        document.createElement(
+            "div"
+        );
+
+    name.className =
+        "billItemName";
+
+    name.textContent =
+        item.name;
+
+
+    const price =
+        document.createElement(
+            "div"
+        );
+
+    price.className =
+        "billItemPrice";
+
+    price.textContent =
+        "₹" +
+        formatPrice(
+            item.price
+        );
+
+
+    top.appendChild(name);
+    top.appendChild(price);
+
+
+    const qtyRow =
+        document.createElement(
+            "div"
+        );
+
+    qtyRow.className =
+        "billQtyRow";
+
+
+    const minusBtn =
+        document.createElement(
+            "button"
+        );
+
+    minusBtn.type =
+        "button";
+
+    minusBtn.className =
+        "qtyBtn minus";
+
+    minusBtn.innerHTML =
+        '<i class="fa-solid fa-minus"></i>';
+
+
+    const qtyValue =
+        document.createElement(
+            "div"
+        );
+
+    qtyValue.className =
+        "qtyValue";
+
+    qtyValue.textContent =
+        String(
+            billQuantities[id]
+        );
+
+
+    const plusBtn =
+        document.createElement(
+            "button"
+        );
+
+    plusBtn.type =
+        "button";
+
+    plusBtn.className =
+        "qtyBtn plus";
+
+    plusBtn.innerHTML =
+        '<i class="fa-solid fa-plus"></i>';
+
+
+    minusBtn.addEventListener(
+        "click",
+        function(){
+
+            const current =
+                billQuantities[id] || 0;
+
+            if(current <= 0){
+                return;
+            }
+
+            billQuantities[id] =
+                current - 1;
+
+            qtyValue.textContent =
+                String(
+                    billQuantities[id]
+                );
+
+            saveBillCart();
+            updateFloatingCart();
+
+        }
+    );
+
+
+    plusBtn.addEventListener(
+        "click",
+        function(){
+
+            if(
+                item.is_available === false
+            ){
+                return;
+            }
+
+            const current =
+                billQuantities[id] || 0;
+
+            billQuantities[id] =
+                current + 1;
+
+            qtyValue.textContent =
+                String(
+                    billQuantities[id]
+                );
+
+            saveBillCart();
+            updateFloatingCart();
+
+        }
+    );
+
+
+    qtyRow.appendChild(
+        minusBtn
+    );
+
+    qtyRow.appendChild(
+        qtyValue
+    );
+
+    qtyRow.appendChild(
+        plusBtn
+    );
+
+
+    card.appendChild(top);
+    card.appendChild(qtyRow);
+
+
+    if(
+        item.is_available === false
+    ){
+
+        const ribbon =
+            document.createElement(
+                "div"
+            );
+
+        ribbon.className =
+            "outOfStockRibbon";
+
+        ribbon.textContent =
+            "OUT OF STOCK";
+
+        card.appendChild(
+            ribbon
+        );
+
+        minusBtn.disabled =
+            true;
+
+        plusBtn.disabled =
+            true;
+
+    }
+
+
+    return card;
+
+}
+
+
+/* =========================================================
+   PATCH BILL CARD LIVE
+========================================================= */
+
+function patchBillCard(item){
+
+    if(!billItemsContainer){
+        return;
+    }
+
+
+    const existing =
+        billItemsContainer.querySelector(
+            '.billItemCard[data-id="' +
+            CSS.escape(
+                String(item.id)
+            ) +
+            '"]'
+        );
+
+
+    if(
+        existing &&
+        existing.classList.contains(
+            "outOfStock"
+        ) !==
+        (item.is_available === false)
+    ){
+
+        renderBillItems();
+        return;
+
+    }
+
+
+    const card =
+        billItemsContainer.querySelector(
+            '.billItemCard[data-id="' +
+            CSS.escape(
+                String(item.id)
+            ) +
+            '"]'
+        );
+
+
+    if(!card){
+
+        renderBillItems();
+        return;
+    }
+
+
+    const name =
+        card.querySelector(
+            ".billItemName"
+        );
+
+    const price =
+        card.querySelector(
+            ".billItemPrice"
+        );
+
+
+    if(name){
+        name.textContent =
+            item.name;
+    }
+
+
+    if(price){
+
+        price.textContent =
+            "₹" +
+            formatPrice(
+                item.price
+            );
+
+    }
+
+    updateFloatingCart();
+
+}
+
+
+/* =========================================================
+   RENDER MENU
+========================================================= */
+
+function renderAdminMenu(){
+
+    if(menuItems.length === 0){
+
+        adminMenuContainer.innerHTML =
+            '<div class="emptyAdmin">No menu items yet.</div>';
+
+        return;
+    }
+
+
+    adminMenuContainer.innerHTML =
+        "";
+
+    let renderedCount =
+        0;
+
+
+    CATEGORY_ORDER.forEach(
+        function(category){
+
+            const items =
+                menuItems
+                    .filter(
+                        item =>
+                            item.category === category
+                    )
+                    .filter(
+                        item => {
+
+                            if(!adminSearchQuery){
+                                return true;
+                            }
+
+                            const haystack =
+                                (
+                                    String(item.name || "") +
+                                    " " +
+                                    String(item.category || "")
+                                ).toLowerCase();
+
+                            return haystack.includes(
+                                adminSearchQuery
+                            );
+
+                        }
+                    )
+                    .sort(
+                        (a,b) =>
+                            (a.sort_order || 0) -
+                            (b.sort_order || 0)
+                    );
+
+
+            if(items.length === 0){
+                return;
+            }
+
+            renderedCount +=
+                items.length;
+
+
+            const block =
+                document.createElement(
+                    "div"
+                );
+
+            block.className =
+                "categoryBlock";
+
+
+            const heading =
+                document.createElement(
+                    "div"
+                );
+
+            heading.className =
+                "categoryHeading";
+
+            heading.textContent =
+                category;
+
+
+            const list =
+                document.createElement(
+                    "div"
+                );
+
+            list.className =
+                "menuAdminList";
+
+
+            items.forEach(
+                function(item){
+
+                    list.appendChild(
+                        createAdminRow(
+                            item
+                        )
+                    );
+
+                }
+            );
+
+
+            block.appendChild(
+                heading
+            );
+
+            block.appendChild(
+                list
+            );
+
+            adminMenuContainer
+                .appendChild(
+                    block
+                );
+
+        }
+    );
+
+
+    if(renderedCount === 0){
+
+        adminMenuContainer.innerHTML =
+            '<div class="noSearchResult">No matching menu items.</div>';
+
+    }
+
+}
+
+
+/* =========================================================
+   MENU ROW
+========================================================= */
+
+function createAdminRow(item){
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+    row.className =
+        "menuAdminRow";
+
+    row.dataset.id =
+        String(item.id);
+
+
+    const info =
+        document.createElement(
+            "div"
+        );
+
+    info.className =
+        "menuAdminInfo";
+
+
+    const name =
+        document.createElement(
+            "div"
+        );
+
+    name.className =
+        "menuAdminName";
+
+    name.textContent =
+        item.name;
+
+
+    const price =
+        document.createElement(
+            "div"
+        );
+
+    price.className =
+        "menuAdminPrice";
+
+    price.textContent =
+        "₹" +
+        formatPrice(
+            item.price
+        );
+
+
+    info.appendChild(name);
+    info.appendChild(price);
+
+
+    const editBtn =
+        document.createElement(
+            "button"
+        );
+
+    editBtn.className =
+        "editMenuBtn";
+
+    editBtn.type =
+        "button";
+
+    editBtn.innerHTML =
+        '<i class="fa-solid fa-pen"></i>';
+
+
+    const stockWrap =
+        document.createElement(
+            "div"
+        );
+
+    stockWrap.className =
+        "stockToggleWrap";
+
+
+    const stockText =
+        document.createElement(
+            "div"
+        );
+
+    stockText.className =
+        "stockText";
+
+
+    const stockLabel =
+        document.createElement(
+            "label"
+        );
+
+    stockLabel.className =
+        "stockSwitch";
+
+
+    const stockInput =
+        document.createElement(
+            "input"
+        );
+
+    stockInput.type =
+        "checkbox";
+
+    stockInput.checked =
+        item.is_available !== false;
+
+
+    const stockSlider =
+        document.createElement(
+            "span"
+        );
+
+    stockSlider.className =
+        "stockSlider";
+
+
+    stockLabel.appendChild(
+        stockInput
+    );
+
+    stockLabel.appendChild(
+        stockSlider
+    );
+
+    stockWrap.appendChild(
+        stockText
+    );
+
+    stockWrap.appendChild(
+        stockLabel
+    );
+
+
+    function updateStockLabel(){
+
+        const isOn =
+            stockInput.checked;
+
+        stockText.textContent =
+            isOn
+                ? "In stock"
+                : "Out";
+
+        stockText.classList.toggle(
+            "on",
+            isOn
+        );
+
+        stockText.classList.toggle(
+            "off",
+            !isOn
+        );
+
+    }
+
+
+    updateStockLabel();
+
+
+    stockInput.addEventListener(
+        "change",
+        async function(){
+
+            const desired =
+                stockInput.checked;
+
+            stockLabel.classList.add(
+                "saving"
+            );
+
+            stockInput.disabled =
+                true;
+
+
+            const { error } =
+                await db.rpc(
+                    "menu_admin_set_stock",
+                    {
+                        p_session_token:
+                            currentAdminSession,
+
+                        p_item_id:
+                            item.id,
+
+                        p_is_available:
+                            desired
+                    }
+                );
+
+
+            stockLabel.classList.remove(
+                "saving"
+            );
+
+            stockInput.disabled =
+                false;
+
+
+            if(error){
+
+                stockInput.checked =
+                    !desired;
+
+                updateStockLabel();
+
+                setAdminStatus(
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+
+            item.is_available =
+                desired;
+
+            updateStockLabel();
+
+            patchBillCard(
+                item
+            );
+
+            setAdminStatus(
+                desired
+                    ? "In stock ✓"
+                    : "Out of stock"
+            );
+
+        }
+    );
+
+
+    const editFields =
+        document.createElement(
+            "div"
+        );
+
+    editFields.className =
+        "editFields";
+
+
+    const nameInput =
+        document.createElement(
+            "input"
+        );
+
+    nameInput.className =
+        "adminInput editName";
+
+    nameInput.type =
+        "text";
+
+    nameInput.value =
+        item.name;
+
+
+    const priceInput =
+        document.createElement(
+            "input"
+        );
+
+    priceInput.className =
+        "adminInput editPrice";
+
+    priceInput.type =
+        "number";
+
+    priceInput.min =
+        "0";
+
+    priceInput.step =
+        "0.01";
+
+    priceInput.inputMode =
+        "decimal";
+
+    priceInput.value =
+        Number(item.price);
+
+
+    const saveBtn =
+        document.createElement(
+            "button"
+        );
+
+    saveBtn.className =
+        "rowTick";
+
+    saveBtn.type =
+        "button";
+
+    saveBtn.innerHTML =
+        '<i class="fa-solid fa-check"></i>';
+
+
+    const cancelBtn =
+        document.createElement(
+            "button"
+        );
+
+    cancelBtn.className =
+        "rowCancel";
+
+    cancelBtn.type =
+        "button";
+
+    cancelBtn.innerHTML =
+        '<i class="fa-solid fa-xmark"></i>';
+
+
+    editFields.appendChild(
+        nameInput
+    );
+
+    editFields.appendChild(
+        priceInput
+    );
+
+    editFields.appendChild(
+        saveBtn
+    );
+
+    editFields.appendChild(
+        cancelBtn
+    );
+
+
+    const savedBadge =
+        document.createElement(
+            "div"
+        );
+
+    savedBadge.className =
+        "rowSavedBadge";
+
+    savedBadge.innerHTML =
+        '<i class="fa-solid fa-check"></i><span>Saved</span>';
+
+
+    row.appendChild(info);
+    row.appendChild(stockWrap);
+    row.appendChild(editBtn);
+    row.appendChild(editFields);
+    row.appendChild(savedBadge);
+
+
+    editBtn.addEventListener(
+        "click",
+        function(){
+
+            row.classList.add(
+                "editing"
+            );
+
+            nameInput.focus();
+
+        }
+    );
+
+
+    cancelBtn.addEventListener(
+        "click",
+        function(){
+
+            nameInput.value =
+                item.name;
+
+            priceInput.value =
+                Number(item.price);
+
+            row.classList.remove(
+                "editing"
+            );
+
+        }
+    );
+
+
+    saveBtn.addEventListener(
+        "click",
+        async function(){
+
+            const changedName =
+                nameInput.value.trim();
+
+            const changedPrice =
+                Number(
+                    priceInput.value
+                );
+
+
+            if(
+                !changedName ||
+                !Number.isFinite(
+                    changedPrice
+                ) ||
+                changedPrice < 0
+            ){
+
+                setAdminStatus(
+                    "Enter a valid name and price.",
+                    true
+                );
+
+                return;
+            }
+
+
+            saveBtn.disabled =
+                true;
+
+
+            const oldName =
+                item.name;
+
+            const oldPrice =
+                item.price;
+
+
+            /* instant local UI */
+            item.name =
+                changedName;
+
+            item.price =
+                changedPrice;
+
+            name.textContent =
+                changedName;
+
+            price.textContent =
+                "₹" +
+                formatPrice(
+                    changedPrice
+                );
+
+            row.classList.remove(
+                "editing"
+            );
+
+
+            const { error } =
+                await db.rpc(
+                    "menu_admin_update",
+                    {
+                        p_session_token:
+                            currentAdminSession,
+
+                        p_item_id:
+                            item.id,
+
+                        p_name:
+                            changedName,
+
+                        p_price:
+                            changedPrice
+                    }
+                );
+
+
+            saveBtn.disabled =
+                false;
+
+
+            if(error){
+
+                item.name =
+                    oldName;
+
+                item.price =
+                    oldPrice;
+
+                name.textContent =
+                    oldName;
+
+                price.textContent =
+                    "₹" +
+                    formatPrice(
+                        oldPrice
+                    );
+
+                nameInput.value =
+                    oldName;
+
+                priceInput.value =
+                    Number(
+                        oldPrice
+                    );
+
+                setAdminStatus(
+                    error.message,
+                    true
+                );
+
+                return;
+            }
+
+
+            showSavedAnimation(
+                row,
+                saveBtn
+            );
+
+        }
+    );
+
+
+    return row;
+
+}
+
+
+/* =========================================================
+   SAVED ANIMATION
+========================================================= */
+
+function showSavedAnimation(
+    row,
+    tickButton
+){
+
+    row.classList.add(
+        "showSaved"
+    );
+
+    tickButton.classList.remove(
+        "savedAnimate"
+    );
+
+    void tickButton.offsetWidth;
+
+    tickButton.classList.add(
+        "savedAnimate"
+    );
+
+
+    setTimeout(
+        function(){
+
+            row.classList.remove(
+                "showSaved"
+            );
+
+            tickButton.classList.remove(
+                "savedAnimate"
+            );
+
+        },
+        1200
+    );
+
+}
+
+
+/* =========================================================
+   PRICE FORMAT
+========================================================= */
+
+function formatPrice(value){
+
+    const number =
+        Number(value);
+
+    if(
+        Number.isInteger(number)
+    ){
+        return number.toString();
+    }
+
+    return number.toFixed(2);
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+adminSearchInput.addEventListener(
+    "input",
+    function(){
+
+        adminSearchQuery =
+            this.value
+                .trim()
+                .toLowerCase();
+
+        renderAdminMenu();
+
+    }
+);
+
+
+/* =========================================================
+   ADD MENU PANEL
+========================================================= */
+
+openAddItemBtn.addEventListener(
+    "click",
+    function(){
+
+        addPanel.classList.toggle(
+            "show"
+        );
+
+        if(
+            addPanel.classList.contains(
+                "show"
+            )
+        ){
+
+            setTimeout(
+                function(){
+                    newItemName.focus();
+                },
+                50
+            );
+
+        }
+
+    }
+);
+
+
+cancelAddBtn.addEventListener(
+    "click",
+    function(){
+
+        newItemName.value =
+            "";
+
+        newItemPrice.value =
+            "";
+
+        addPanel.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ADD MENU ITEM
+========================================================= */
+
+saveNewItemBtn.addEventListener(
+    "click",
+    async function(){
+
+        const category =
+            newCategory.value;
+
+        const name =
+            newItemName.value.trim();
+
+        const price =
+            Number(
+                newItemPrice.value
+            );
+
+
+        if(
+            !name ||
+            !Number.isFinite(price) ||
+            price < 0
+        ){
+
+            setAdminStatus(
+                "Enter item name and valid price.",
+                true
+            );
+
+            return;
+        }
+
+
+        const nextSortOrder =
+            Math.max(
+                0,
+                ...menuItems
+                    .filter(
+                        item =>
+                            item.category === category
+                    )
+                    .map(
+                        item =>
+                            Number(
+                                item.sort_order
+                            ) || 0
+                    )
+            ) + 1;
+
+
+        saveNewItemBtn.disabled =
+            true;
+
+
+        const { data, error } =
+            await db.rpc(
+                "menu_admin_insert",
+                {
+                    p_session_token:
+                        currentAdminSession,
+
+                    p_category:
+                        category,
+
+                    p_name:
+                        name,
+
+                    p_price:
+                        price,
+
+                    p_sort_order:
+                        nextSortOrder
+                }
+            );
+
+
+        saveNewItemBtn.disabled =
+            false;
+
+
+        if(error){
+
+            setAdminStatus(
+                error.message,
+                true
+            );
+
+            return;
+        }
+
+
+        const result =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        if(result){
+            upsertLocalItem(
+                result
+            );
+        }
+
+
+        newItemName.value =
+            "";
+
+        newItemPrice.value =
+            "";
+
+        addPanel.classList.remove(
+            "show"
+        );
+
+
+        saveNewItemBtn.classList.remove(
+            "savedAnimate"
+        );
+
+        void saveNewItemBtn.offsetWidth;
+
+        saveNewItemBtn.classList.add(
+            "savedAnimate"
+        );
+
+        setAdminStatus(
+            "Added ✓"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   REALTIME MENU
+========================================================= */
+
+function subscribeMenuRealtime(){
+
+    if(menuRealtimeChannel){
+        return;
+    }
+
+
+    menuRealtimeChannel =
+        db
+            .channel(
+                "menu-items-live"
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event:"*",
+                    schema:"public",
+                    table:"menu_items"
+                },
+                function(payload){
+
+                    if(
+                        payload.eventType ===
+                        "INSERT"
+                    ){
+
+                        upsertLocalItem(
+                            payload.new
+                        );
+
+                    }
+
+
+                    if(
+                        payload.eventType ===
+                        "UPDATE"
+                    ){
+
+                        upsertLocalItem(
+                            payload.new
+                        );
+
+                    }
+
+
+                    if(
+                        payload.eventType ===
+                        "DELETE"
+                    ){
+
+                        removeLocalItem(
+                            payload.old.id
+                        );
+
+                    }
+
+                }
+            )
+            .subscribe();
+
+}
+
+
+/* =========================================================
+   PATCH LOCAL MENU
+========================================================= */
+
+function upsertLocalItem(record){
+
+    if(
+        !record ||
+        !record.id
+    ){
+        return;
+    }
+
+
+    const index =
+        menuItems.findIndex(
+            item =>
+                String(item.id) ===
+                String(record.id)
+        );
+
+
+    if(index >= 0){
+
+        menuItems[index] = {
+            ...menuItems[index],
+            ...record
+        };
+
+        patchExistingRow(
+            menuItems[index]
+        );
+
+        patchBillCard(
+            menuItems[index]
+        );
+
+        return;
+    }
+
+
+    menuItems.push(
+        record
+    );
+
+    renderAdminMenu();
+    renderBillItems();
+
+}
+
+
+function patchExistingRow(item){
+
+    const row =
+        adminMenuContainer.querySelector(
+            '.menuAdminRow[data-id="' +
+            CSS.escape(
+                String(item.id)
+            ) +
+            '"]'
+        );
+
+
+    if(!row){
+
+        renderAdminMenu();
+        return;
+    }
+
+
+    const name =
+        row.querySelector(
+            ".menuAdminName"
+        );
+
+    const price =
+        row.querySelector(
+            ".menuAdminPrice"
+        );
+
+    const nameInput =
+        row.querySelector(
+            ".editName"
+        );
+
+    const priceInput =
+        row.querySelector(
+            ".editPrice"
+        );
+
+    const stockInput =
+        row.querySelector(
+            '.stockSwitch input'
+        );
+
+    const stockText =
+        row.querySelector(
+            '.stockText'
+        );
+
+
+    if(name){
+        name.textContent =
+            item.name;
+    }
+
+    if(price){
+        price.textContent =
+            "₹" +
+            formatPrice(
+                item.price
+            );
+    }
+
+
+    if(stockInput){
+
+        const isOn =
+            item.is_available !== false;
+
+        stockInput.checked =
+            isOn;
+
+        if(stockText){
+
+            stockText.textContent =
+                isOn
+                    ? "In stock"
+                    : "Out";
+
+            stockText.classList.toggle(
+                "on",
+                isOn
+            );
+
+            stockText.classList.toggle(
+                "off",
+                !isOn
+            );
+
+        }
+
+    }
+
+
+    if(
+        !row.classList.contains(
+            "editing"
+        )
+    ){
+
+        if(nameInput){
+            nameInput.value =
+                item.name;
+        }
+
+        if(priceInput){
+            priceInput.value =
+                Number(
+                    item.price
+                );
+        }
+
+    }
+
+}
+
+
+function removeLocalItem(id){
+
+    menuItems =
+        menuItems.filter(
+            item =>
+                String(item.id) !==
+                String(id)
+        );
+
+    const row =
+        adminMenuContainer.querySelector(
+            '.menuAdminRow[data-id="' +
+            CSS.escape(
+                String(id)
+            ) +
+            '"]'
+        );
+
+
+    if(row){
+        row.remove();
+    }
+
+    delete billQuantities[
+        String(id)
+    ];
+
+    saveBillCart();
+    renderBillItems();
+
+}
+
+
+/* =========================================================
+   LOAD ADMIN ACCOUNTS
+========================================================= */
+
+async function loadAdminAccounts(){
+
+    adminAccountsList.innerHTML =
+        '<div class="adminLoading">Loading admins...</div>';
+
+
+    const { data, error } =
+        await db.rpc(
+            "admin_list",
+            {
+                p_session_token:
+                    currentAdminSession
+            }
+        );
+
+
+    if(error){
+
+        adminAccountsList.innerHTML =
+            '<div class="emptyAdmin">Could not load admins.</div>';
+
+        setAdminStatus(
+            error.message,
+            true
+        );
+
+        return;
+    }
+
+
+    adminAccounts =
+        data || [];
+
+    renderAdminAccounts();
+
+}
+
+
+/* =========================================================
+   RENDER ADMIN ACCOUNTS
+========================================================= */
+
+function renderAdminAccounts(){
+
+    adminAccountsList.innerHTML =
+        "";
+
+
+    if(adminAccounts.length === 0){
+
+        adminAccountsList.innerHTML =
+            '<div class="emptyAdmin">No admins found.</div>';
+
+        return;
+    }
+
+
+    adminAccounts.forEach(
+        function(admin){
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "adminAccountRow";
+
+
+            const icon =
+                document.createElement(
+                    "div"
+                );
+
+            icon.className =
+                "adminAccountIcon";
+
+            icon.innerHTML =
+                '<i class="fa-solid fa-user-shield"></i>';
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+            info.className =
+                "adminAccountInfo";
+
+
+            const mobile =
+                document.createElement(
+                    "div"
+                );
+
+            mobile.className =
+                "adminAccountMobile";
+
+            mobile.textContent =
+                admin.mobile;
+
+
+            const tag =
+                document.createElement(
+                    "div"
+                );
+
+            tag.className =
+                "adminAccountTag";
+
+            tag.textContent =
+                admin.mobile ===
+                currentAdminMobile
+                    ? "Current admin"
+                    : "Admin";
+
+
+            info.appendChild(
+                mobile
+            );
+
+            info.appendChild(
+                tag
+            );
+
+
+            const deleteBtn =
+                document.createElement(
+                    "button"
+                );
+
+            deleteBtn.className =
+                "deleteAdminBtn";
+
+            deleteBtn.type =
+                "button";
+
+            deleteBtn.innerHTML =
+                '<i class="fa-solid fa-trash"></i>';
+
+
+            if(
+                admin.mobile ===
+                currentAdminMobile
+            ){
+
+                deleteBtn.disabled =
+                    true;
+
+            }
+
+
+            deleteBtn.addEventListener(
+                "click",
+                async function(){
+
+                    if(deleteBtn.disabled){
+                        return;
+                    }
+
+
+                    const confirmed =
+                        confirm(
+                            "Delete admin " +
+                            admin.mobile +
+                            "?"
+                        );
+
+
+                    if(!confirmed){
+                        return;
+                    }
+
+
+                    deleteBtn.disabled =
+                        true;
+
+
+                    const { data, error } =
+                        await db.rpc(
+                            "admin_delete",
+                            {
+                                p_session_token:
+                                    currentAdminSession,
+
+                                p_admin_id:
+                                    admin.id
+                            }
+                        );
+
+
+                    if(error){
+
+                        deleteBtn.disabled =
+                            false;
+
+                        setAdminStatus(
+                            error.message,
+                            true
+                        );
+
+                        return;
+                    }
+
+
+                    adminAccounts =
+                        adminAccounts.filter(
+                            item =>
+                                String(item.id) !==
+                                String(admin.id)
+                        );
+
+                    row.remove();
+
+                    setAdminStatus(
+                        "Admin deleted"
+                    );
+
+                }
+            );
+
+
+            row.appendChild(icon);
+            row.appendChild(info);
+            row.appendChild(deleteBtn);
+
+            adminAccountsList
+                .appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NEW ADMIN PANEL
+========================================================= */
+
+openNewAdminBtn.addEventListener(
+    "click",
+    function(){
+
+        newAdminPanel.classList.toggle(
+            "show"
+        );
+
+        if(
+            newAdminPanel.classList.contains(
+                "show"
+            )
+        ){
+
+            setTimeout(
+                function(){
+                    newAdminMobile.focus();
+                },
+                50
+            );
+
+        }
+
+    }
+);
+
+
+newAdminMobile.addEventListener(
+    "input",
+    function(){
+
+        this.value =
+            this.value
+                .replace(/\D/g,"")
+                .slice(0,10);
+
+    }
+);
+
+
+cancelNewAdminBtn.addEventListener(
+    "click",
+    function(){
+
+        newAdminMobile.value =
+            "";
+
+        newAdminPassword.value =
+            "";
+
+        newAdminPanel.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CREATE NEW ADMIN
+========================================================= */
+
+saveNewAdminBtn.addEventListener(
+    "click",
+    async function(){
+
+        const mobile =
+            newAdminMobile.value.trim();
+
+        const password =
+            newAdminPassword.value;
+
+
+        if(mobile.length !== 10){
+
+            setAdminStatus(
+                "Admin mobile must be 10 digits.",
+                true
+            );
+
+            return;
+        }
+
+
+        if(password.length < 6){
+
+            setAdminStatus(
+                "Admin password must be at least 6 characters.",
+                true
+            );
+
+            return;
+        }
+
+
+        saveNewAdminBtn.disabled =
+            true;
+
+
+        const { data, error } =
+            await db.rpc(
+                "admin_create",
+                {
+                    p_session_token:
+                        currentAdminSession,
+
+                    p_mobile:
+                        mobile,
+
+                    p_password:
+                        password
+                }
+            );
+
+
+        saveNewAdminBtn.disabled =
+            false;
+
+
+        if(error){
+
+            setAdminStatus(
+                error.message,
+                true
+            );
+
+            return;
+        }
+
+
+        const result =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        if(result){
+
+            adminAccounts.push(
+                result
+            );
+
+            adminAccounts.sort(
+                (a,b) =>
+                    new Date(a.created_at) -
+                    new Date(b.created_at)
+            );
+
+            renderAdminAccounts();
+
+        }
+
+
+        newAdminMobile.value =
+            "";
+
+        newAdminPassword.value =
+            "";
+
+        newAdminPanel.classList.remove(
+            "show"
+        );
+
+
+        saveNewAdminBtn.classList.remove(
+            "savedAnimate"
+        );
+
+        void saveNewAdminBtn.offsetWidth;
+
+        saveNewAdminBtn.classList.add(
+            "savedAnimate"
+        );
+
+        setAdminStatus(
+            "Admin created ✓"
+        );
+
+    }
+);
+
+
+
+/* =========================================================
+   ALL ORDERS
+========================================================= */
+
+function openAllOrdersPage(){
+
+    allOrdersPage.classList.add(
+        "show"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+    orderSearchQuery =
+        "";
+
+    ordersSearchInput.value =
+        "";
+
+    loadAllOrders();
+
+}
+
+
+function closeAllOrdersPage(){
+
+    allOrdersPage.classList.remove(
+        "show",
+        "swiping",
+        "swipeClosingRight",
+        "swipeClosingLeft"
+    );
+
+    allOrdersPage.style.transform =
+        "";
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+if(openAllOrdersBtn){
+
+    openAllOrdersBtn.addEventListener(
+        "click",
+        openAllOrdersPage
+    );
+
+}
+
+
+closeAllOrdersBtn.addEventListener(
+    "click",
+    closeAllOrdersPage
+);
+
+
+closeAllOrdersBtnRight.addEventListener(
+    "click",
+    closeAllOrdersPage
+);
+
+
+ordersSearchInput.addEventListener(
+    "input",
+    function(){
+
+        orderSearchQuery =
+            this.value
+                .trim()
+                .toLowerCase();
+
+        renderAllOrders();
+
+    }
+);
+
+
+/* =========================================================
+   LOAD ORDERS
+========================================================= */
+
+async function loadAllOrders(){
+
+    ordersContent.innerHTML =
+        '<div class="ordersLoading"><div class="ordersSpinner"></div></div>';
+
+
+    const { data, error } =
+        await db.rpc(
+            "admin_all_orders",
+            {
+                p_session_token:
+                    currentAdminSession
+            }
+        );
+
+
+    if(error){
+
+        console.error(
+            "Orders load error:",
+            error
+        );
+
+        ordersContent.innerHTML =
+            '<div class="ordersEmpty">Could not load orders.</div>';
+
+        return;
+    }
+
+
+    allOrdersData =
+        data || [];
+
+    allOrdersLoaded =
+        true;
+
+    renderAllOrders();
+
+}
+
+
+/* =========================================================
+   RENDER ORDERS
+========================================================= */
+
+function renderAllOrders(){
+
+    const rows =
+        allOrdersData.filter(
+            function(order){
+
+                if(!orderSearchQuery){
+                    return true;
+                }
+
+
+                const itemsText =
+                    Array.isArray(
+                        order.items
+                    )
+                    ? order.items
+                        .map(
+                            item =>
+                                (
+                                    String(item.name || "") +
+                                    " " +
+                                    String(item.category || "")
+                                )
+                        )
+                        .join(" ")
+                    : "";
+
+
+                const haystack =
+                    (
+                        String(order.token_number || "") +
+                        " " +
+                        String(order.created_by_mobile || "") +
+                        " " +
+                        String(order.created_at || "") +
+                        " " +
+                        itemsText
+                    )
+                    .toLowerCase();
+
+
+                return haystack.includes(
+                    orderSearchQuery
+                );
+
+            }
+        );
+
+
+    if(rows.length === 0){
+
+        ordersContent.innerHTML =
+            '<div class="ordersEmpty">No matching orders.</div>';
+
+        return;
+    }
+
+
+    const list =
+        document.createElement(
+            "div"
+        );
+
+    list.className =
+        "ordersList";
+
+
+    rows.forEach(
+        function(order){
+
+            list.appendChild(
+                createOrderCard(
+                    order
+                )
+            );
+
+        }
+    );
+
+
+    ordersContent.innerHTML =
+        "";
+
+    ordersContent.appendChild(
+        list
+    );
+
+}
+
+
+/* =========================================================
+   ORDER CARD
+========================================================= */
+
+function createOrderCard(order){
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+    card.className =
+        "orderCard";
+
+
+    const head =
+        document.createElement(
+            "div"
+        );
+
+    head.className =
+        "orderHead";
+
+
+    const left =
+        document.createElement(
+            "div"
+        );
+
+
+    const token =
+        document.createElement(
+            "div"
+        );
+
+    token.className =
+        "orderToken";
+
+    token.textContent =
+        "Token #" +
+        order.token_number;
+
+
+    const date =
+        document.createElement(
+            "div"
+        );
+
+    date.className =
+        "orderDate";
+
+    date.textContent =
+        formatOrderDate(
+            order.created_at
+        );
+
+
+    left.appendChild(
+        token
+    );
+
+    left.appendChild(
+        date
+    );
+
+
+    const right =
+        document.createElement(
+            "div"
+        );
+
+
+    const amount =
+        document.createElement(
+            "div"
+        );
+
+    amount.className =
+        "orderAmount";
+
+    amount.textContent =
+        "₹" +
+        formatPrice(
+            order.total_amount || 0
+        );
+
+
+    const meta =
+        document.createElement(
+            "div"
+        );
+
+    meta.className =
+        "orderMeta";
+
+    meta.textContent =
+        Number(
+            order.total_items || 0
+        ) +
+        " items • Qty " +
+        Number(
+            order.total_quantity || 0
+        );
+
+
+    right.appendChild(
+        amount
+    );
+
+    right.appendChild(
+        meta
+    );
+
+
+    head.appendChild(
+        left
+    );
+
+    head.appendChild(
+        right
+    );
+
+
+    const itemsWrap =
+        document.createElement(
+            "div"
+        );
+
+    itemsWrap.className =
+        "orderItems";
+
+
+    const items =
+        Array.isArray(
+            order.items
+        )
+        ? order.items
+        : [];
+
+
+    items.forEach(
+        function(item){
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "orderItemRow";
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+            name.className =
+                "orderItemName";
+
+            name.textContent =
+                item.name || "";
+
+
+            const qty =
+                document.createElement(
+                    "div"
+                );
+
+            qty.className =
+                "orderItemQty";
+
+            qty.textContent =
+                "×" +
+                Number(
+                    item.quantity || 0
+                );
+
+
+            const price =
+                document.createElement(
+                    "div"
+                );
+
+            price.className =
+                "orderItemPrice";
+
+            price.textContent =
+                "₹" +
+                formatPrice(
+                    item.line_total ||
+                    (
+                        Number(item.price || 0) *
+                        Number(item.quantity || 0)
+                    )
+                );
+
+
+            row.appendChild(
+                name
+            );
+
+            row.appendChild(
+                qty
+            );
+
+            row.appendChild(
+                price
+            );
+
+            itemsWrap.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    card.appendChild(
+        head
+    );
+
+    card.appendChild(
+        itemsWrap
+    );
+
+
+    return card;
+
+}
+
+
+/* =========================================================
+   ORDER DATE
+========================================================= */
+
+function formatOrderDate(value){
+
+    if(!value){
+        return "";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+        return value;
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SWIPE TO CLOSE - BOTH DIRECTIONS
+========================================================= */
+
+let ordersTouchStartX =
+    null;
+
+let ordersTouchStartY =
+    null;
+
+
+allOrdersPage.addEventListener(
+    "touchstart",
+    function(event){
+
+        const touch =
+            event.touches[0];
+
+        ordersTouchStartX =
+            touch.clientX;
+
+        ordersTouchStartY =
+            touch.clientY;
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+allOrdersPage.addEventListener(
+    "touchmove",
+    function(event){
+
+        if(
+            ordersTouchStartX === null ||
+            ordersTouchStartY === null
+        ){
+            return;
+        }
+
+        const touch =
+            event.touches[0];
+
+        const diffX =
+            touch.clientX -
+            ordersTouchStartX;
+
+        const diffY =
+            touch.clientY -
+            ordersTouchStartY;
+
+        if(
+            Math.abs(diffX) >
+            Math.abs(diffY) * 1.25
+        ){
+
+            allOrdersPage.classList.add(
+                "swiping"
+            );
+
+            allOrdersPage.style.transform =
+                "translateX(" +
+                diffX +
+                "px)";
+
+        }
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+allOrdersPage.addEventListener(
+    "touchend",
+    function(event){
+
+        if(
+            ordersTouchStartX === null ||
+            ordersTouchStartY === null
+        ){
+            return;
+        }
+
+
+        const touch =
+            event.changedTouches[0];
+
+        const diffX =
+            touch.clientX -
+            ordersTouchStartX;
+
+        const diffY =
+            touch.clientY -
+            ordersTouchStartY;
+
+
+        /*
+         * Horizontal swipe either left or right.
+         */
+        if(
+            Math.abs(diffX) > 90 &&
+            Math.abs(diffX) >
+            Math.abs(diffY) * 1.25
+        ){
+
+            allOrdersPage.classList.remove(
+                "swiping"
+            );
+
+            allOrdersPage.style.transform =
+                "";
+
+            allOrdersPage.classList.add(
+                diffX > 0
+                    ? "swipeClosingRight"
+                    : "swipeClosingLeft"
+            );
+
+            setTimeout(
+                function(){
+
+                    closeAllOrdersPage();
+
+                    allOrdersPage.classList.remove(
+                        "swipeClosingRight",
+                        "swipeClosingLeft"
+                    );
+
+                },
+                220
+            );
+
+        }
+
+        else{
+
+            allOrdersPage.classList.remove(
+                "swiping"
+            );
+
+            allOrdersPage.style.transform =
+                "";
+
+        }
+
+
+        ordersTouchStartX =
+            null;
+
+        ordersTouchStartY =
+            null;
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+
+/* =========================================================
+   ANDROID BLUETOOTH PRINTER BRIDGE
+========================================================= */
+
+function updatePrinterStatus(
+    name = ""
+){
+
+    selectedPrinterName =
+        name || "";
+
+    if(selectedPrinterName){
+
+        localStorage.setItem(
+            "goldenWafflePrinterName",
+            selectedPrinterName
+        );
+
+        printerStatusText.textContent =
+            selectedPrinterName;
+
+        printerStatusBadge.textContent =
+            "Connected";
+
+        printerStatusBadge.classList.add(
+            "connected"
+        );
+
+    }
+    else{
+
+        localStorage.removeItem(
+            "goldenWafflePrinterName"
+        );
+
+        printerStatusText.textContent =
+            "Not connected";
+
+        printerStatusBadge.textContent =
+            "Offline";
+
+        printerStatusBadge.classList.remove(
+            "connected"
+        );
+
+    }
+
+}
+
+
+updatePrinterStatus(
+    selectedPrinterName
+);
+
+
+scanPrintersBtn.addEventListener(
+    "click",
+    function(){
+
+        scanPrintersBtn.classList.add(
+            "loading"
+        );
+
+        printerList.classList.add(
+            "show"
+        );
+
+        printerList.innerHTML =
+            '<div class="printerEmpty">Searching printers...</div>';
+
+
+        if(
+            window.AndroidPrinter &&
+            typeof window.AndroidPrinter.scanPrinters ===
+            "function"
+        ){
+
+            window.AndroidPrinter
+                .scanPrinters();
+
+        }
+        else{
+
+            scanPrintersBtn.classList.remove(
+                "loading"
+            );
+
+            printerList.innerHTML =
+                '<div class="printerEmpty">Bluetooth printer bridge will work inside the Android app.</div>';
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CALLED FROM ANDROID KOTLIN
+========================================================= */
+
+window.onPrintersFound =
+    function(printersJson){
+
+        scanPrintersBtn.classList.remove(
+            "loading"
+        );
+
+        let printers =
+            [];
+
+
+        try{
+
+            printers =
+                typeof printersJson ===
+                "string"
+                    ? JSON.parse(
+                        printersJson
+                    )
+                    : printersJson;
+
+        }
+        catch(error){
+
+            printers =
+                [];
+
+        }
+
+
+        if(
+            !Array.isArray(printers) ||
+            printers.length === 0
+        ){
+
+            printerList.innerHTML =
+                '<div class="printerEmpty">No Bluetooth printers found.</div>';
+
+            return;
+        }
+
+
+        printerList.innerHTML =
+            "";
+
+
+        printers.forEach(
+            function(printer){
+
+                const name =
+                    typeof printer === "string"
+                        ? printer
+                        : (
+                            printer.name ||
+                            printer.address ||
+                            "Bluetooth Printer"
+                        );
+
+
+                const address =
+                    typeof printer === "object"
+                        ? (
+                            printer.address ||
+                            ""
+                        )
+                        : "";
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "printerDeviceRow";
+
+
+                const printerName =
+                    document.createElement(
+                        "div"
+                    );
+
+                printerName.className =
+                    "printerDeviceName";
+
+                printerName.textContent =
+                    name;
+
+
+                const connectBtn =
+                    document.createElement(
+                        "button"
+                    );
+
+                connectBtn.className =
+                    "printerConnectBtn";
+
+                connectBtn.type =
+                    "button";
+
+                connectBtn.textContent =
+                    "Connect";
+
+
+                connectBtn.addEventListener(
+                    "click",
+                    function(){
+
+                        if(
+                            window.AndroidPrinter &&
+                            typeof window.AndroidPrinter.connectPrinter ===
+                            "function"
+                        ){
+
+                            window.AndroidPrinter
+                                .connectPrinter(
+                                    address ||
+                                    name
+                                );
+
+                        }
+
+                    }
+                );
+
+
+                row.appendChild(
+                    printerName
+                );
+
+                row.appendChild(
+                    connectBtn
+                );
+
+                printerList.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    };
+
+
+/* Kotlin calls this after successful connection */
+window.onPrinterConnected =
+    function(name){
+
+        scanPrintersBtn.classList.remove(
+            "loading"
+        );
+
+        updatePrinterStatus(
+            name || "Bluetooth Printer"
+        );
+
+        printerList.classList.remove(
+            "show"
+        );
+
+    };
+
+
+/* Kotlin can call this when printer disconnects */
+window.onPrinterDisconnected =
+    function(){
+
+        updatePrinterStatus(
+            ""
+        );
+
+    };
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+logoutBtn.addEventListener(
+    "click",
+    async function(){
+
+        const token =
+            currentAdminSession;
+
+
+        clearAdminSession();
+
+
+        if(token){
+
+            db.rpc(
+                "admin_logout",
+                {
+                    p_session_token:
+                        token
+                }
+            );
+
+        }
+
+
+        if(menuRealtimeChannel){
+
+            db.removeChannel(
+                menuRealtimeChannel
+            );
+
+            menuRealtimeChannel =
+                null;
+
+        }
+
+
+        adminStarted =
+            false;
+
+        menuItems =
+            [];
+
+        adminAccounts =
+            [];
+
+
+        mainPage.style.display =
+            "none";
+
+        loginPage.style.display =
+            "block";
+
+        mobileInput.value =
+            "";
+
+        passwordInput.value =
+            "";
+
+        checkForm();
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }
+);
+
+
+/* =========================================================
+   RESTORE LOGIN ON PAGE LOAD
+========================================================= */
+
+restoreAdminSession();
+
+
+/* =========================================================
+   BOTTOM NAVIGATION
+========================================================= */
+
+const navItems =
+    document.querySelectorAll(
+        ".navItem"
+    );
+
+const pageSections =
+    document.querySelectorAll(
+        ".pageSection"
+    );
+
+
+navItems.forEach(
+    function(item){
+
+        item.addEventListener(
+            "click",
+            function(){
+
+                const pageId =
+                    this.dataset.page;
+
+
+                /* REMOVE ACTIVE NAV */
+
+                navItems.forEach(
+                    function(nav){
+
+                        nav
+                            .classList
+                            .remove(
+                                "active"
+                            );
+
+                    }
+                );
+
+
+                /* SET ACTIVE NAV */
+
+                this
+                    .classList
+                    .add(
+                        "active"
+                    );
+
+
+                /* HIDE ALL PAGES */
+
+                pageSections.forEach(
+                    function(section){
+
+                        section
+                            .classList
+                            .remove(
+                                "active"
+                            );
+
+                    }
+                );
+
+
+                /* SHOW SELECTED PAGE */
+
+                const page =
+                    document
+                        .getElementById(
+                            pageId
+                        );
+
+
+                if(page){
+
+                    page
+                        .classList
+                        .add(
+                            "active"
+                        );
+
+                }
+
+
+                window.scrollTo({
+                    top:0,
+                    behavior:"smooth"
+                });
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
